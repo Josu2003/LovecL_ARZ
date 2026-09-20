@@ -1062,7 +1062,7 @@ imgui.OnFrame(function()
         if mainWindowPos and mainWindowPos.x > 0 then
             imgui.SetNextWindowPos(imgui.ImVec2(mainWindowPos.x + 402, mainWindowPos.y - 0), imgui.Cond.Always)
         else
-            imgui.SetNextWindowPos(imgui.ImVec2(resX / 2, resY / 2), imgui.Cond.Appearing, imgui.ImVec2(0.5, 0.5))
+            imgui.SetNextWindowPos(imgui.ImVec2(resX / 2, resY / 2), imgui.Cond.Once, imgui.ImVec2(0.5, 0.5))
         end
 
         local activeTheme = currentTheme[0]
