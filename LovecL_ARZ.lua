@@ -898,6 +898,9 @@ imgui.OnFrame(
             imgui.PushStyleVarVec2(imgui.StyleVar.ButtonTextAlign, imgui.ImVec2(0.0, 0.5))
             if imgui.Button(ti.ICON_INFO_CIRCLE .. " " .. u8'Инфо', imgui.ImVec2(90, 33)) then
                 InfoWindow[0] = not InfoWindow[0]
+                if InfoWindow[0] then
+                    windowUpdate[0] = false
+                end
             end
             imgui.PopStyleVar()
             
@@ -908,6 +911,9 @@ imgui.OnFrame(
 
                 if imgui.Button(ti.ICON_BOOK_DOWNLOAD .. u8' Update', imgui.ImVec2(90, 33)) then
                     windowUpdate[0] = not windowUpdate[0]
+                    if windowUpdate[0] then
+                        InfoWindow[0] = false
+                    end
                 end
 
                 imgui.PopStyleColor(3) 
@@ -1054,9 +1060,9 @@ imgui.OnFrame(function()
         local resX, resY = getScreenResolution()
 
         if mainWindowPos and mainWindowPos.x > 0 then
-            imgui.SetNextWindowPos(imgui.ImVec2(mainWindowPos.x - 339, mainWindowPos.y), imgui.Cond.FirstUseEver)
+            imgui.SetNextWindowPos(imgui.ImVec2(mainWindowPos.x + 402, mainWindowPos.y - 0), imgui.Cond.Always)
         else
-            imgui.SetNextWindowPos(imgui.ImVec2(resX / 2, resY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+            imgui.SetNextWindowPos(imgui.ImVec2(resX / 2, resY / 2), imgui.Cond.Appearing, imgui.ImVec2(0.5, 0.5))
         end
 
         local activeTheme = currentTheme[0]
@@ -1080,7 +1086,7 @@ imgui.OnFrame(function()
 
         imgui.BeginChild('##ChangelogArea', imgui.ImVec2(320, 100), true)
         if updateChangelog ~= "" then
-            imgui.TextWrapped(updateChangelog) -- Данные из JSON уже в UTF-8!
+            imgui.TextWrapped(updateChangelog)
         else
             imgui.TextWrapped(u8'Описание изменений отсутствует.')
         end
@@ -1090,7 +1096,7 @@ imgui.OnFrame(function()
 
         if imgui.Button(u8'Подтвердить', imgui.ImVec2(160, 30)) then
             sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. ' Обновление подтверждено, скачивание...', -1)
-            startUpdate(updateUrl) -- Функция скачивания .lua файла
+            startUpdate(updateUrl)
             windowUpdate[0] = false
         end
         
@@ -1526,7 +1532,7 @@ end, function()
 
     imgui.Text(u8 " ")
     imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8 "ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ:")
-    imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(1, 0, 0, 1))
+    imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(1, 0, 0, 1)) 
     imgui.BulletText(
         u8 "В данном скрипте присутствует авто-обновление после подтверждения.")
     imgui.BulletText(
