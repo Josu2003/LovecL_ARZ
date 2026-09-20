@@ -1,7 +1,7 @@
 --[[ Информация о скрипте ]]
 script_name("LovecL ARZ")
 script_author("Koora")
-script_version("2.1")
+script_version("2.2")
 
 local update_json_url = "https://raw.githubusercontent.com/Josu2003/LovecL_ARZ/refs/heads/main/update.json"
 local updateVersion = ""
@@ -278,13 +278,39 @@ end
 
 --[[ Запуск обновы ]]
 function startUpdate(download_url)
-    local script_path = thisScript().path
+    if not download_url or download_url == "" then
+        sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. " Ошибка: некорректная ссылка на скачивание!", -1)
+        return
+    end
 
-    downloadUrlToFile(download_url, script_path, function(id, status, p1, p2)
-        if status == 6 then
-            sampAddChatMessage(colors.turquoise .. nameScript .. colors.green .. " Скрипт успешно обновлен! Перезагрузка...", -1)
-            thisScript():reload()
-        elseif status == 3 then
+    local script_path = thisScript().path
+    local temp_path = script_path .. ".temp" -- Скачиваем во временный файл
+
+    downloadUrlToFile(download_url, temp_path, function(id, status, p1, p2)
+        if status == 6 then -- Скачивание успешно завершено
+            local f = io.open(temp_path, "r")
+            if f then
+                local content = f:read("*a")
+                f:close()
+
+                -- Проверяем, что файл не пустой и не содержит ошибку 404/HTML
+                if content and #content > 100 and not content:find("404: Not Found") and not content:find("<!DOCTYPE html>") then
+                    os.remove(script_path)
+                    os.rename(temp_path, script_path)
+
+                    sampAddChatMessage(colors.turquoise .. nameScript .. colors.green .. " Скрипт успешно обновлён! Перезагрузка...", -1)
+
+                    -- Безопасная перезагрузка через 1 секунду
+                    lua_thread.create(function()
+                        wait(1000)
+                        thisScript():reload()
+                    end)
+                else
+                    os.remove(temp_path)
+                    sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. " Ошибка: скачанный файл повреждён!", -1)
+                end
+            end
+        elseif status == 0 then -- Действительная ошибка скачивания
             sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. " Ошибка скачивания обновления!", -1)
         end
     end)
@@ -540,7 +566,7 @@ function main()
     checkUpdate()
     wait(1000)
 
-    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "Скрипт загружен! Версия: 2.1 | Автор:" .. colors.turquoise .. " Koora")
+    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "Скрипт загружен! Версия: 2.2 | Автор:" .. colors.turquoise .. " Koora")
     sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "Используйте /lmenu или Alt + 1 чтобы открыть меню.")
     if shopName == "" then
         sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. "Текущее название лавки: не установлено.")
@@ -878,7 +904,7 @@ imgui.OnFrame(
             applyStyleMintGarden()
         end
 
-            imgui.Begin("LovecL ARZ v2.1 by Koora", WinState, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize)
+            imgui.Begin("LovecL ARZ v2.2 by Koora", WinState, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize)
             local pos = imgui.GetWindowPos()
             mainWindowPos = {
                 x = pos.x,
@@ -1445,7 +1471,7 @@ end, function()
     imgui.Begin(u8 "Информация", InfoWindow, imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoCollapse)
 
     imgui.PushTextWrapPos(0)
-    imgui.Text(u8 "Скрипт: LovecL ARZ v2.1")
+    imgui.Text(u8 "Скрипт: LovecL ARZ v2.2")
     imgui.Text(u8 "Автор: Koora")
     imgui.Text(u8 " ")
     imgui.Text(u8 "ОПИСАНИЕ:")
