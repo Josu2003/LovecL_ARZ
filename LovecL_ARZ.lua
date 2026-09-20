@@ -1505,6 +1505,10 @@ end, function()
     imgui.SameLine()
     imgui.Text(u8 "Ч ¬ключить/выключить ловлю ларцов Concept Car Luxury.")
 
+    imgui.TextColored(imgui.ImVec4(0, 1, 0, 1), '/updatelovacl')
+    imgui.SameLine()
+    imgui.Text(u8 "Ч ѕроверить обновление скрипта.")
+
     imgui.Text(u8 " ")
 
     imgui.Text(u8 "“–≈Ѕќ¬јЌ»я:")
