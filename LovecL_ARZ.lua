@@ -1,7 +1,7 @@
 --[[ Информация о скрипте ]]
 script_name("LovecL ARZ")
 script_author("Koora")
-script_version("2.1")
+script_version("2.2")
 
 local update_json_url = "https://raw.githubusercontent.com/Josu2003/LovecL_ARZ/refs/heads/main/update.json"
 local updateVersion = ""
