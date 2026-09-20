@@ -1,14 +1,14 @@
---[[ Г€Г­ГґГ®Г°Г¬Г Г¶ГЁГї Г® Г±ГЄГ°ГЁГЇГІГҐ ]]
-script_name = "LovecL ARZ v2.2"
+--[[ Информация о скрипте ]]
+script_name = "LovecL ARZ v2.1"
 script_author = "Koora"
-script_version = "2.2"
+script_version = "2.1"
 
 local update_json_url = "https://raw.githubusercontent.com/Josu2003/LovecL_ARZ/refs/heads/main/update.json?token=GHSAT0AAAAAAEJTGSXWF3VGIYRETP7HBFBE2VPTLXQ"
 local updateVersion = ""
 local updateChangelog = ""
 local updateUrl = ""
 
---[[ ГЏГ®Г¤ГЄГ«ГѕГ·ГҐГ­ГЁГҐ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄ ]]
+--[[ Подключение библиотек ]]
 local missingLibraries = {}
 
 local function loadLibrary(moduleName)
@@ -36,20 +36,20 @@ if #missingLibraries > 0 then
             wait(100)
         end
 
-        sampAddChatMessage('{FF0000}[LovecL] ГЌГҐ ГіГ¤Г Г«Г®Г±Гј Г§Г ГЈГ°ГіГ§ГЁГІГј Г­ГҐГ®ГЎГµГ®Г¤ГЁГ¬Г»ГҐ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГЁ:', -1)
+        sampAddChatMessage('{FF0000}[LovecL] Не удалось загрузить необходимые библиотеки:', -1)
         for _, moduleName in ipairs(missingLibraries) do
-            sampAddChatMessage('{0ABDC6}[LovecL] {FFFF00}Г“Г±ГІГ Г­Г®ГўГЁГІГҐ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГі: ' .. moduleName, -1)
+            sampAddChatMessage('{0ABDC6}[LovecL] {FFFF00}Установите библиотеку: ' .. moduleName, -1)
         end
-        sampAddChatMessage('{0ABDC6}[LovecL] {FF0000}Г‘ГЄГ°ГЁГЇГІ Г®Г±ГІГ Г­Г®ГўГ«ГҐГ­. Г“Г±ГІГ Г­Г®ГўГЁГІГҐ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГЁ ГЁ ГЇГҐГ°ГҐГ§Г ГЇГіГ±ГІГЁГІГҐ ГЁГЈГ°Гі ГЁГ«ГЁ ГЇГ°Г®Г¦Г¬ГЁГІГҐ ГЄГ®Г¬ГЎГЁГ­Г Г¶ГЁГѕ CTRL + R', -1)
+        sampAddChatMessage('{0ABDC6}[LovecL] {FF0000}Скрипт остановлен. Установите библиотеки и перезапустите игру или прожмите комбинацию CTRL + R', -1)
     end
     return
 end
 
---[[ ГГ°ГЁГґГІГ» Г¤Г«Гї ГЇГ°ГҐГ¤ГіГЇГ°ГҐГ¦Г¤ГҐГ­ГЁГ© Г­Г  ГЅГЄГ°Г Г­ГҐ ]]
+--[[ Шрифты для предупреждений на экране ]]
 local renderFont = renderCreateFont("Arial", 8, 5)
 local renderFontSmall = renderCreateFont("Arial", 10, 5)
 
---[[ Г‡Г ГЈГ°ГіГ§ГЄГ  ГёГ°ГЁГґГІГ  ГЁГЄГ®Г­Г®ГЄ ]]
+--[[ Загрузка шрифта иконок ]]
 local function loadIconicFont(fontSize)
     local config = imgui.ImFontConfig()
     config.MergeMode = true
@@ -63,13 +63,13 @@ imgui.OnInitialize(function()
     imgui.GetIO().IniFilename = nil
 end)
 
---[[ ГЏГ°Г®ГўГҐГ°ГЄГ  ГЁ Г±Г®Г§Г¤Г Г­ГЁГҐ ГЇГ ГЇГЄГЁ ГЄГ®Г­ГґГЁГЈГіГ°Г Г¶ГЁГЁ ]]
+--[[ Проверка и создание папки конфигурации ]]
 local dirLovecL = getWorkingDirectory() .. '/config/LovecL/'
 if not doesDirectoryExist(dirLovecL) then
     createDirectory(dirLovecL)
 end
 
---[[ Г‡Г ГЈГ°ГіГ§ГЄГ  ГЁ Г±Г®Г§Г¤Г Г­ГЁГҐ ГЄГ®Г­ГґГЁГЈГіГ°Г Г¶ГЁГЁ ]]
+--[[ Загрузка и создание конфигурации ]]
 local directIni = "LovecL/LovecL.ini"
 local ini = inicfg.load({
     main = {
@@ -112,11 +112,11 @@ if not doesFileExist(getWorkingDirectory() .. '/' .. directIni) then
     inicfg.save(ini, directIni)
 end
 
---[[ ГЉГ®Г¤ГЁГ°Г®ГўГЄГ  ]]
+--[[ Кодировка ]]
 encoding.default = 'CP1251'
 local u8 = encoding.UTF8
 
---[[ Г‘Г®Г±ГІГ®ГїГ­ГЁГҐ Г®ГЄГ®Г­ ГЁ ГўГЄГ«Г Г¤Г®ГЄ ]]
+--[[ Состояние окон и вкладок ]]
 local WinState = imgui.new.bool(false)
 local InfoWindow = imgui.new.bool(false)
 local LavkaSettingsWindow = imgui.new.bool(false)
@@ -126,11 +126,11 @@ local currentTab = 1
 local mainWindowPos = nil
 local windowUpdate = imgui.new.bool(false)
 
---[[ ГЌГ Г±ГІГ°Г®Г©ГЄГЁ ГІГҐГ¬ Г®ГґГ®Г°Г¬Г«ГҐГ­ГЁГї ]]
-local themes = {u8"ГЃГҐГ°ГҐГ§Г®ГўГ Гї", u8"Г’ВёГ¬Г­Г Гї (Г’ВёГ¬Г­Г®-ГЄГ°Г Г±Г­Г Гї)", u8"ГЌГҐГ®Г­Г®ГўГ»Г© ГЄГЁГЎГҐГ°ГЇГ Г­ГЄ (ГЏГіГ°ГЇГіГ°Г­Г®-Г°Г®Г§Г®ГўГ Гї)", u8"ГќГ«ГҐГЄГІГ°ГЁГ·ГҐГ±ГЄГЁГ© Г±ГЁГ­ГЁГ© (ГЉГ®ГЎГ Г«ГјГІ)", u8"ГЊГїГІГ­Г»Г© Г±Г Г¤"}
+--[[ Настройки тем оформления ]]
+local themes = {u8"Березовая", u8"Тёмная (Тёмно-красная)", u8"Неоновый киберпанк (Пурпурно-розовая)", u8"Электрический синий (Кобальт)", u8"Мятный сад"}
 local currentTheme = imgui.new.int(ini.main.theme or 0)
 
---[[ Г„Г Г­Г­Г»ГҐ Г«Г ГўГЄГЁ ]]
+--[[ Данные лавки ]]
 local shopName = ini.main.shopName and u8:decode(ini.main.shopName) or ""
 local delay = imgui.new.int(ini.main.delay or 0)
 local shopNameBuf = imgui.new.char[64](u8(shopName))
@@ -138,51 +138,51 @@ local autoSell = imgui.new.bool(ini.main.autoSell or false)
 local autoSellPrice = imgui.new.int(math.min(math.max(tonumber(ini.main.autoSellPrice) or 1000000, 500000), 50000000))
 local autoSellPriceVC = imgui.new.int(math.min(math.max(tonumber(ini.main.autoSellPriceVC) or 10000, 10000), 1000000))
 
---[[ Г–ГўГҐГІГ  Г·Г ГІГ  ]]
+--[[ Цвета чата ]]
 local colors = {
-    turquoise   = "{0ABDC6}", -- ГЃГЁГ°ГѕГ§Г®ГўГ»Г©
-    red         = "{FF0000}", -- ГЉГ°Г Г±Г­Г»Г©
-    white       = "{FFFFFF}", -- ГЃГҐГ«Г»Г©
-    green       = "{00FF00}", -- Г‡ГҐГ«ГҐГ­Г»Г©
-    greenBright = "{0eff0e}", -- ГџГ°ГЄГ®-Г§ГҐГ«ГҐГ­Г»Г©
-    redLower    = "{ff0000}", -- ГЉГ°Г Г±Г­Г»Г© (Г­ГЁГ¦Г­ГЁГ© Г°ГҐГЈГЁГ±ГІГ°)
-    whiteLower  = "{ffffff}", -- ГЃГҐГ«Г»Г© (Г­ГЁГ¦Г­ГЁГ© Г°ГҐГЈГЁГ±ГІГ°)
+    turquoise   = "{0ABDC6}", -- Бирюзовый
+    red         = "{FF0000}", -- Красный
+    white       = "{FFFFFF}", -- Белый
+    green       = "{00FF00}", -- Зеленый
+    greenBright = "{0eff0e}", -- Ярко-зеленый
+    redLower    = "{ff0000}", -- Красный (нижний регистр)
+    whiteLower  = "{ffffff}", -- Белый (нижний регистр)
 }
 
---[[ Г‘Г±Г»Г«ГЄГЁ ГЁ QR-ГЄГ®Г¤ ]]
+--[[ Ссылки и QR-код ]]
 local donatalertsURL = "https://www.donationalerts.com/r/koora"
 local qrBase64 = "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"
 local qrTexture = nil
 
--- Г‘ГЇГЁГ±Г®ГЄ Г­Г Г§ГўГ Г­ГЁГ© Г¶ГўГҐГІГ®Гў Г¤Г«Гї Combo
+-- Список названий цветов для Combo
 local selectedColor = imgui.new.int(ini.main.selectedColor or 0)
 local isRandomColor = imgui.new.bool(ini.main.isRandomColor or false)
 local colorList = {
-    { name = u8"ГЉГ°Г Г±Г­Г»Г©", col = imgui.ImVec4(1.0, 0.25, 0.25, 1.0) },
-    { name = u8"ГђГ®Г§Г®ГўГ»Г©", col = imgui.ImVec4(1.0, 0.3, 0.75, 1.0) },
-    { name = u8"Г”ГЁГ®Г«ГҐГІГ®ГўГ»Г©", col = imgui.ImVec4(0.7, 0.25, 1.0, 1.0) },
-    { name = u8"Г‘ГЁГ­ГҐ-ГґГЁГ®Г«ГҐГІГ®ГўГ»Г©", col = imgui.ImVec4(0.35, 0.3, 1.0, 1.0) },
-    { name = u8"ГѓГ®Г«ГіГЎГ®Г©", col = imgui.ImVec4(0.25, 0.75, 1.0, 1.0) },
-    { name = u8"ГЃГЁГ°ГѕГ§Г®ГўГ»Г©", col = imgui.ImVec4(0.25, 1.0, 0.95, 1.0) },
-    { name = u8"ГЊГїГІГ­Г»Г©", col = imgui.ImVec4(0.25, 1.0, 0.7, 1.0) },
-    { name = u8"Г‘Г Г«Г ГІГ®ГўГ»Г©", col = imgui.ImVec4(0.25, 1.0, 0.25, 1.0) },
-    { name = u8"Г†ГҐГ«ГІГ®-Г§ГҐГ«ГҐГ­Г»Г©", col = imgui.ImVec4(0.7, 1.0, 0.25, 1.0) },
-    { name = u8"Г†ГҐГ«ГІГ»Г©", col = imgui.ImVec4(1.0, 0.95, 0.25, 1.0) },
-    { name = u8"ГЋГ°Г Г­Г¦ГҐГўГ»Г©", col = imgui.ImVec4(1.0, 0.75, 0.25, 1.0) },
-    { name = u8"Г’ГҐГ¬Г­Г®-Г®Г°Г Г­Г¦ГҐГўГ»Г©", col = imgui.ImVec4(1.0, 0.45, 0.25, 1.0) },
-    { name = u8"Г’ГҐГ¬Г­Г®-ГЄГ°Г Г±Г­Г»Г©", col = imgui.ImVec4(0.7, 0.1, 0.1, 1.0) },
-    { name = u8"Г’ГҐГ¬Г­Г®-Г±ГЁГ­ГЁГ©", col = imgui.ImVec4(0.1, 0.2, 0.7, 1.0) },
-    { name = u8"Г’ГҐГ¬Г­Г®-Г§ГҐГ«ГҐГ­Г»Г©", col = imgui.ImVec4(0.1, 0.6, 0.1, 1.0) },
-    { name = u8"ГЃГҐГ«Г»Г©", col = imgui.ImVec4(0.95, 0.95, 0.95, 1.0) }
+    { name = u8"Красный", col = imgui.ImVec4(1.0, 0.25, 0.25, 1.0) },
+    { name = u8"Розовый", col = imgui.ImVec4(1.0, 0.3, 0.75, 1.0) },
+    { name = u8"Фиолетовый", col = imgui.ImVec4(0.7, 0.25, 1.0, 1.0) },
+    { name = u8"Сине-фиолетовый", col = imgui.ImVec4(0.35, 0.3, 1.0, 1.0) },
+    { name = u8"Голубой", col = imgui.ImVec4(0.25, 0.75, 1.0, 1.0) },
+    { name = u8"Бирюзовый", col = imgui.ImVec4(0.25, 1.0, 0.95, 1.0) },
+    { name = u8"Мятный", col = imgui.ImVec4(0.25, 1.0, 0.7, 1.0) },
+    { name = u8"Салатовый", col = imgui.ImVec4(0.25, 1.0, 0.25, 1.0) },
+    { name = u8"Желто-зеленый", col = imgui.ImVec4(0.7, 1.0, 0.25, 1.0) },
+    { name = u8"Желтый", col = imgui.ImVec4(1.0, 0.95, 0.25, 1.0) },
+    { name = u8"Оранжевый", col = imgui.ImVec4(1.0, 0.75, 0.25, 1.0) },
+    { name = u8"Темно-оранжевый", col = imgui.ImVec4(1.0, 0.45, 0.25, 1.0) },
+    { name = u8"Темно-красный", col = imgui.ImVec4(0.7, 0.1, 0.1, 1.0) },
+    { name = u8"Темно-синий", col = imgui.ImVec4(0.1, 0.2, 0.7, 1.0) },
+    { name = u8"Темно-зеленый", col = imgui.ImVec4(0.1, 0.6, 0.1, 1.0) },
+    { name = u8"Белый", col = imgui.ImVec4(0.95, 0.95, 0.95, 1.0) }
 }
 
---[[ Г’ГҐГЄГ±ГІГ» Г±ГЄГ°ГЁГЇГІГ  ]]
+--[[ Тексты скрипта ]]
 local nameScript = "[LovecL] "
-local text_shopName = "Г’ГҐГЄГіГ№ГҐГҐ Г­Г Г§ГўГ Г­ГЁГҐ Г«Г ГўГЄГЁ: "
-local text_saveNameShop = "ГЌГ Г§ГўГ Г­ГЁГҐ Г«Г ГўГЄГЁ Г±Г®ГµГ°Г Г­ГҐГ­Г®: "
-local text_checkCharacters = "ГЏГ®Г¦Г Г«ГіГ©Г±ГІГ , ГіГЄГ Г¦ГЁГІГҐ Г­Г®ГўГ®ГҐ Г­Г Г§ГўГ Г­ГЁГҐ Г«Г ГўГЄГЁ (Г®ГІ 3 Г¤Г® 20 Г±ГЁГ¬ГўГ®Г«Г®Гў)"
+local text_shopName = "Текущее название лавки: "
+local text_saveNameShop = "Название лавки сохранено: "
+local text_checkCharacters = "Пожалуйста, укажите новое название лавки (от 3 до 20 символов)"
 
---[[ Г‘Г®Г±ГІГ®ГїГ­ГЁГҐ ГґГіГ­ГЄГ¶ГЁГ© ГЁ Г±ГІГ ГІГЁГ±ГІГЁГЄГ  Г«Г®ГўГ«ГЁ ]]
+--[[ Состояние функций и статистика ловли ]]
 local isActiveFlood = false
 local isSpammingAlt = false
 local autoSellFlow = false
@@ -197,7 +197,7 @@ local floodKeyPresses = {}
 local floodCps = 0
 local luxuryCount = 0
 
---[[ ГЏГҐГ°ГҐГЄГ«ГѕГ·Г ГІГҐГ«ГЁ ГЇГ®ГўГҐГ¤ГҐГ­ГЁГї ГЁ Г±Г®Г®ГЎГ№ГҐГ­ГЁГ© ]]
+--[[ Переключатели поведения и сообщений ]]
 local disableDistanceCheck = imgui.new.bool(ini.main.disableDistanceCheck or false)
 local offFloodChatMessage = imgui.new.bool(ini.main.offFloodChatMessage ~= false)
 local silentMode = imgui.new.bool(ini.main.silentMode or false)
@@ -206,7 +206,7 @@ local renderEnabled = imgui.new.bool(false)
 local autoLuxuryZavoz = imgui.new.bool(ini.main.autoLuxuryZavoz ~= false)
 
 
---[[ Г„Г Г­Г­Г»ГҐ Г°ГҐГ­Г¤ГҐГ°Г  Г«Г ГўГ®ГЄ ГЁ Г¶ГўГҐГІГ®Гў ]]
+--[[ Данные рендера лавок и цветов ]]
 local renderMassive = {}
 local shopStatus = {}
 local reserveTimerObj = {}
@@ -245,7 +245,7 @@ local defaultTextColor = {0.47, 1.0, 0.0, 1.0}
 local defaultSaleLineColor = {0.0, 0.0, 1.0, 1.0}
 local defaultSaleTextColor = {0.0, 0.0, 1.0, 1.0}
 
--- Г”ГіГ­ГЄГ¶ГЁГї ГЇГ°Г®ГўГҐГ°ГЄГЁ Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГ©
+--[[Функция проврки обновы]]
 function checkUpdate()
     local update_path = getWorkingDirectory() .. "/config/LovecL/update.json"
     local current_version = thisScript().version
@@ -262,13 +262,13 @@ function checkUpdate()
                     local ok, data = pcall(decodeJson, content)
                     if ok and data and data.version then
                         if tostring(data.version) ~= current_version then
-                            -- Г‡Г ГЇГЁГ±Г»ГўГ ГҐГ¬ Г¤Г Г­Г­Г»ГҐ ГЁГ§ JSON Гў ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г»ГҐ Г¤Г«Гї mimgui
+                            -- Записываем данные из JSON в переменные для mimgui
                             updateVersion = tostring(data.version)
-                            updateChangelog = data.changelog or "ГЋГЇГЁГ±Г Г­ГЁГҐ ГЁГ§Г¬ГҐГ­ГҐГ­ГЁГ© Г®ГІГ±ГіГІГ±ГІГўГіГҐГІ."
+                            updateChangelog = data.changelog or "Описание изменений отсутствует."
                             updateUrl = data.url
                             
-                            -- ГЋГІГЄГ°Г»ГўГ ГҐГ¬ ГўГ ГёГҐ Г®ГЄГ­Г® mimgui
-                            windowUpdate[0] = true
+                            -- Уведомление в чат вместо автоматического открытия окна
+                            sampAddChatMessage(colors.turquoise .. nameScript .. " {FFFFFF}Доступно новое обновление {7FFF00}v" .. updateVersion .. "{FFFFFF}! Введите {FF0000}/updatelovecl{FFFFFF}, чтобы обновиться.", -1)
                         end
                     end
                 end
@@ -277,16 +277,16 @@ function checkUpdate()
     end)
 end
 
---[[]]
+--[[ Запуск обновы ]]
 function startUpdate(download_url)
     local script_path = thisScript().path
 
     downloadUrlToFile(download_url, script_path, function(id, status, p1, p2)
         if status == 6 then
-            sampAddChatMessage(colors.turquoise .. nameScript .. " {00FF00}Г‘ГЄГ°ГЁГЇГІ ГіГ±ГЇГҐГёГ­Г® Г®ГЎГ­Г®ГўГ«ГҐГ­! ГЏГҐГ°ГҐГ§Г ГЈГ°ГіГ§ГЄГ ...", -1)
+            sampAddChatMessage(colors.turquoise .. nameScript .. " {00FF00}Скрипт успешно обновлен! Перезагрузка...", -1)
             thisScript():reload()
         elseif status == 3 then
-            sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. " ГЋГёГЁГЎГЄГ  Г±ГЄГ Г·ГЁГўГ Г­ГЁГї Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГї!", -1)
+            sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. " Ошибка скачивания обновления!", -1)
         end
     end)
 end
@@ -298,7 +298,7 @@ local function saveColorToIni(prefix, color)
     ini.main[prefix .. "A"] = color[3]
     inicfg.save(ini, directIni)
 end
---[[ Г„Г Г­Г­Г»ГҐ ГЄГ«Г ГўГЁГё Г¤Г«Гї ГЇГ°Г®ГўГҐГ°ГЄГЁ Г­Г Г¦Г ГІГЁГї ]]
+--[[ Данные клавиш для проверки нажатия ]]
 local keysData = {
     [1024] = {structElement = 4, size = 2}, -- ALT
     [64] = {structElement = 36, size = 1},  -- Y
@@ -306,7 +306,7 @@ local keysData = {
     [192] = {structElement = 36, size = 1}  -- H
 }
 
---[[ Г”ГіГ­ГЄГ¶ГЁГї Г¤Г«Гї Г±ГЎГ°Г®Г±Г  Г¶ГўГҐГІГ  ГЄ Г§Г­Г Г·ГҐГ­ГЁГѕ ГЇГ® ГіГ¬Г®Г«Г·Г Г­ГЁГѕ ]]
+--[[ Функция для сброса цвета к значению по умолчанию ]]
 local function resetColorToDefault(color, defaultColor, prefix)
     for index = 0, 3 do
         color[index] = defaultColor[index + 1]
@@ -314,7 +314,7 @@ local function resetColorToDefault(color, defaultColor, prefix)
     saveColorToIni(prefix, color)
 end
 
---[[ Г”ГіГ­ГЄГ¶ГЁГї Г¤Г«Гї ГЄГ®Г­ГўГҐГ°ГІГ Г¶ГЁГЁ RGBA Гў ARGB ]]
+--[[ Функция для конвертации RGBA в ARGB ]]
 local function rgbaToARGB(color)
     local red = math.floor((color[1] or 1) * 255)
     local green = math.floor((color[2] or 1) * 255)
@@ -323,7 +323,7 @@ local function rgbaToARGB(color)
     return bit.bor(bit.lshift(alpha, 24), bit.lshift(red, 16), bit.lshift(green, 8), blue)
 end
 
---[[ Г”ГіГ­ГЄГ¶ГЁГї Г¤Г«Гї Г±ГЎГ°Г®Г±Г  Г°ГҐГ­Г¤ГҐГ°Г  Г«Г ГўГ®ГЄ ]]
+--[[ Функция для сброса рендера лавок ]]
 local function resetRender()
     renderMassive = {}
     shopStatus = {}
@@ -331,10 +331,10 @@ local function resetRender()
     reserveLabelObjects = {}
     reserveLabelData = {}
     pendingReserveLabels = {}
-    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. " ГђГҐГ­Г¤ГҐГ° Г«Г ГўГ®ГЄ Г®ГЎГ­Г®ГўГ«ВёГ­. ГЋГЎГ­Г®ГўГЁГІГҐ Г§Г®Г­Гі Г±ГІГ°ГЁГ¬Г .", -1)
+    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. " Рендер лавок обновлён. Обновите зону стрима.", -1)
 end
 
---[[ ГЏГ°ГЁГЄГ°ГҐГЇГ«ГїГҐГІ ГІГ Г©Г¬ГҐГ° ГЎГ°Г®Г­ГЁ ГЄ ГЎГ«ГЁГ¦Г Г©ГёГҐГ© Г±ГўГ®ГЎГ®Г¤Г­Г®Г© Г«Г ГўГЄГҐ ]]
+--[[ Прикрепляет таймер брони к ближайшей свободной лавке ]]
 local function attachReserveTimer(position, minutes, labelId, expiresAt)
     local timerEnd = expiresAt or (os.time() + math.max(minutes, 0) * 60)
     local linkedObject = labelId and reserveLabelObjects[labelId]
@@ -376,7 +376,7 @@ local function attachReserveTimer(position, minutes, labelId, expiresAt)
     return false
 end
 
---[[ ГЏГ°ГЁГЄГ°ГҐГЇГ«ГїГҐГІ Г®ГІГ«Г®Г¦ГҐГ­Г­Г»ГҐ ГІГ Г©Г¬ГҐГ°Г» ГЇГ®Г±Г«ГҐ ГЇГ®ГїГўГ«ГҐГ­ГЁГї Г«Г ГўГ®ГЄ ]]
+--[[ Прикрепляет отложенные таймеры после появления лавок ]]
 local function attachPendingReserveLabels()
     for index = #pendingReserveLabels, 1, -1 do
         local label = pendingReserveLabels[index]
@@ -386,7 +386,7 @@ local function attachPendingReserveLabels()
     end
 end
 
---[[ ГЋГ·ГЁГ№Г ГҐГІ ГІГ Г©Г¬ГҐГ° ГІГҐГЄГ±ГІГ  ГЁГ«ГЁ Г®ГЎГєГҐГЄГІГ  ГЁ Г±Г®ГµГ°Г Г­ГїГҐГІ ГҐГЈГ® ГЇГ°ГЁ ГўГ»ГЈГ°ГіГ§ГЄГҐ ]]
+--[[ Очищает таймер текста или объекта и сохраняет его при выгрузке ]]
 local function clearReserveData(labelId, object, preserveLabels)
     if labelId then
         local linkedObject = reserveLabelObjects[labelId]
@@ -424,7 +424,7 @@ local function clearReserveData(labelId, object, preserveLabels)
     end
 end
 
---[[ Г”ГіГ­ГЄГ¶ГЁГї Г®ГІГ°ГЁГ±Г®ГўГЄГЁ Г°ГҐГ­Г¤ГҐГ°Г  ]]
+--[[ Функция отрисовки рендера ]]
 local function drawRender()
     if not isActiveRender or #renderMassive == 0 then
         return
@@ -455,9 +455,9 @@ local function drawRender()
     end
     local headerX = posX
     local prefixText = colors.turquoise .. nameScript .. colors.white .. " "
-    local freeText = string.format("Г‘ГўГ®ГЎГ®Г¤Г­Г»Гµ: %d", freeCount)
+    local freeText = string.format("Свободных: %d", freeCount)
     local separatorText = " | "
-    local saleText = string.format("ГЏГ°Г®Г¤Г ГѕГІГ±Гї: %d", saleCount)
+    local saleText = string.format("Продаются: %d", saleCount)
 
     renderFontDrawText(renderFont, prefixText, headerX, headerY, 0xFFFFFFFF, 0x90000000)
     headerX = headerX + renderGetFontDrawTextLength(renderFont, prefixText)
@@ -483,16 +483,16 @@ local function drawRender()
                         local status = shopStatus[object] or "free"
                         local line = {lineColor[0], lineColor[1], lineColor[2], lineColor[3]}
                         local text = {textColor[0], textColor[1], textColor[2], textColor[3]}
-                        local label = "Г‘ГўГ®ГЎГ®Г¤Г­Г Гї"
+                        local label = "Свободная"
                         local timer = ""
                         local timerColor = {1, 1, 1, 1}
 
                         if status == "sale" then
                             line = {saleLineColor[0], saleLineColor[1], saleLineColor[2], saleLineColor[3]}
                             text = {saleTextColor[0], saleTextColor[1], saleTextColor[2], saleTextColor[3]}
-                            label = "ГЏГ°Г®Г¤Г ВёГІГ±Гї"
+                            label = "Продаётся"
                         elseif reserveTimerObj[object] then
-                            label = "ГЃГ°Г®Г­Гј Г§Г ГЄГ Г­Г·ГЁГўГ ГҐГІГ±Гї Г·ГҐГ°ГҐГ§:"
+                            label = "Бронь заканчивается через:"
                             local remaining = math.max(0, reserveTimerObj[object] - os.time())
                             timer = string.format("[%d:%02d]", math.floor(remaining / 60), remaining % 60)
 
@@ -526,14 +526,14 @@ local function drawRender()
     end
 end
 
---[[ ГЏГҐГ°ГҐГЄГ«ГѕГ·Г ГҐГІ Г±Г®Г±ГІГ®ГїГ­ГЁГҐ Г°ГҐГ­Г¤ГҐГ°Г  Г«Г ГўГ®ГЄ ]]
+--[[ Переключает состояние рендера лавок ]]
 local function toggleRender()
     isActiveRender = not isActiveRender
     renderEnabled[0] = isActiveRender
-    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. " ГђГҐГ­Г¤ГҐГ° Г«Г ГўГ®ГЄ: " .. (isActiveRender and colors.greenBright .. "Г‚ГЉГ‹" or colors.redLower .. "Г‚Г›ГЉГ‹"), -1)
+    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. " Рендер лавок: " .. (isActiveRender and colors.greenBright .. "ВКЛ" or colors.redLower .. "ВЫКЛ"), -1)
 end
 
---[[ ГЋГ±Г­Г®ГўГ­Г®Г© Г¶ГЁГЄГ« Г±ГЄГ°ГЁГЇГІГ  ]]
+--[[ Основной цикл скрипта ]]
 function main()
     while not isSampAvailable() do
         wait(10)
@@ -541,10 +541,10 @@ function main()
     checkUpdate()
     wait(1000)
 
-    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "Г‘ГЄГ°ГЁГЇГІ Г§Г ГЈГ°ГіГ¦ГҐГ­! Г‚ГҐГ°Г±ГЁГї: 2.1 | ГЂГўГІГ®Г°:" .. colors.turquoise .. " Koora")
-    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "Г€Г±ГЇГ®Г«ГјГ§ГіГ©ГІГҐ /lmenu ГЁГ«ГЁ Alt + 1 Г·ГІГ®ГЎГ» Г®ГІГЄГ°Г»ГІГј Г¬ГҐГ­Гѕ.")
+    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "Скрипт загружен! Версия: 2.1 | Автор:" .. colors.turquoise .. " Koora")
+    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "Используйте /lmenu или Alt + 1 чтобы открыть меню.")
     if shopName == "" then
-        sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. "Г’ГҐГЄГіГ№ГҐГҐ Г­Г Г§ГўГ Г­ГЁГҐ Г«Г ГўГЄГЁ: Г­ГҐ ГіГ±ГІГ Г­Г®ГўГ«ГҐГ­Г®.")
+        sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. "Текущее название лавки: не установлено.")
     else
         sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. text_shopName .. colors.green .. " " .. shopName, -1)
     end
@@ -558,6 +558,13 @@ function main()
     sampRegisterChatCommand("render", toggleRender)
     sampRegisterChatCommand("resrender", resetRender)
     sampRegisterChatCommand("luxury", toggleLuxury)
+    sampRegisterChatCommand('abalupdate', function()
+    if updateVersion ~= "" then
+        windowUpdate[0] = not windowUpdate[0]
+    else
+        sampAddChatMessage(colors.turquoise .. nameScript .. " {FFFFFF}Обновления не найдены или у вас уже установлена последняя версия.", -1)
+    end
+    end)
 
     while true do 
         wait(0)
@@ -574,7 +581,7 @@ function main()
     end
 end
 
---[[ Г„ГҐГЄГ®Г¤ГЁГ°ГіГҐГІ Г±ГІГ°Г®ГЄГі Base64 Гў Г¤ГўГ®ГЁГ·Г­Г»ГҐ Г¤Г Г­Г­Г»ГҐ ]]
+--[[ Декодирует строку Base64 в двоичные данные ]]
 local function base64_decode(data)
     local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
     data = string.gsub(data, '[^' .. b .. '=]', '')
@@ -602,7 +609,7 @@ local function base64_decode(data)
     end))
 end
 
---[[ Г‘Г®Г§Г¤Г ВёГІ ГІГҐГЄГ±ГІГіГ°Гі ImGui ГЁГ§ ГўГ±ГІГ°Г®ГҐГ­Г­Г®Г© Base64-Г±ГІГ°Г®ГЄГЁ ]]
+--[[ Создаёт текстуру ImGui из встроенной Base64-строки ]]
 imgui.OnInitialize(function()
     local ok, result = pcall(function()
         if type(qrBase64) ~= "string" or qrBase64 == "" then
@@ -627,7 +634,7 @@ end)
 
 
 
---[[ Г’ГҐГ¬Г  1: ГЎГЁГ°ГѕГ§Г®ГўГ Гї ]]
+--[[ Тема 1: бирюзовая ]]
 function applyStyleTurquoise()
     local rgba = imgui.ImVec4
     local style = imgui.GetStyle()
@@ -666,7 +673,7 @@ function applyStyleTurquoise()
     style.TabRounding = 6
 end
 
---[[ Г’ГҐГ¬Г  2: ГІВёГ¬Г­Г Гї, ГІВёГ¬Г­Г®-ГЄГ°Г Г±Г­Г Гї ]]
+--[[ Тема 2: тёмная, тёмно-красная ]]
 function applyStyleRed()
     local rgba = imgui.ImVec4
     local style = imgui.GetStyle()
@@ -705,7 +712,7 @@ function applyStyleRed()
     style.TabRounding = 4.0
 end
 
---[[ Г’ГҐГ¬Г  3: Г­ГҐГ®Г­Г®ГўГ»Г© ГЄГЁГЎГҐГ°ГЇГ Г­ГЄ, ГЇГіГ°ГЇГіГ°Г­Г®-Г°Г®Г§Г®ГўГ Гї ]]
+--[[ Тема 3: неоновый киберпанк, пурпурно-розовая ]]
 function applyStyleCyberpunk()
     local rgba = imgui.ImVec4
     local style = imgui.GetStyle()
@@ -745,7 +752,7 @@ function applyStyleCyberpunk()
     style.TabRounding = 5.0
 end
 
---[[ Г’ГҐГ¬Г  4: ГЅГ«ГҐГЄГІГ°ГЁГ·ГҐГ±ГЄГЁГ© Г±ГЁГ­ГЁГ©, ГЄГ®ГЎГ Г«ГјГІ ]]
+--[[ Тема 4: электрический синий, кобальт ]]
 function applyStyleElectricBlue()
     local rgba = imgui.ImVec4
     local style = imgui.GetStyle()
@@ -785,7 +792,7 @@ function applyStyleElectricBlue()
     style.TabRounding = 5.0
 end
 
---[[ Г’ГҐГ¬Г  5: Г±ГўГҐГІГ«Г Гї, Г¬ГїГІГ­Г®-ГЄГ®Г°Г Г«Г«Г®ГўГ Гї ]]
+--[[ Тема 5: светлая, мятно-коралловая ]]
 function applyStyleMintGarden()
     local rgba = imgui.ImVec4
     local style = imgui.GetStyle()
@@ -824,7 +831,7 @@ function applyStyleMintGarden()
     style.TabRounding = 6.0
 end
 
---[[ ГЋГІГ®ГЎГ°Г Г¦Г ГҐГІ ГЇГ®Г¤Г±ГЄГ Г§ГЄГі Г± ГЁГЄГ®Г­ГЄГ®Г© ГўГ®ГЇГ°Г®Г±Г  ]]
+--[[ Отображает подсказку с иконкой вопроса ]]
 function helpMarker(text)
     local rgba = imgui.ImVec4
     local themeColors = {
@@ -849,7 +856,7 @@ function helpMarker(text)
     end
 end
 
---[[ ГѓГ«Г ГўГ­Г®ГҐ Г®ГЄГ­Г® Г±ГЄГ°ГЁГЇГІГ  ]]
+--[[ Главное окно скрипта ]]
 imgui.OnFrame(
     function()
         if wasKeyPressed(vkeys.VK_ESCAPE) then
@@ -882,8 +889,8 @@ imgui.OnFrame(
             }
                             
             local tabs = {
-                {name = u8"ГЋГ±Г­Г®ГўГ­Г®ГҐ", icon = ti.ICON_HOME},
-                {name = u8"ГЌГ Г±ГІГ°Г®Г©ГЄГЁ", icon = ti.ICON_SETTINGS}
+                {name = u8"Основное", icon = ti.ICON_HOME},
+                {name = u8"Настройки", icon = ti.ICON_SETTINGS}
             }
 
             for tabIndex, tabData in ipairs(tabs) do
@@ -892,7 +899,7 @@ imgui.OnFrame(
                 end
             end
             imgui.PushStyleVarVec2(imgui.StyleVar.ButtonTextAlign, imgui.ImVec2(0.0, 0.5))
-            if imgui.Button(ti.ICON_INFO_CIRCLE .. " " .. u8'Г€Г­ГґГ®', imgui.ImVec2(90, 33)) then
+            if imgui.Button(ti.ICON_INFO_CIRCLE .. " " .. u8'Инфо', imgui.ImVec2(90, 33)) then
                 InfoWindow[0] = not InfoWindow[0]
             end
             imgui.PopStyleVar()
@@ -910,46 +917,46 @@ imgui.OnFrame(
             imgui.SetWindowFontScale(1.0)
 
             if imgui.IsItemHovered() then
-                imgui.SetTooltip(u8"ГЏГ®Г¤Г¤ГҐГ°Г¦Г ГІГј Г°Г Г§Г°Г ГЎГ®ГІГ·ГЁГЄГ ")
+                imgui.SetTooltip(u8"Поддержать разработчика")
             end
 
             imgui.SetCursorPos(imgui.ImVec2(101, 28))
             if imgui.BeginChild("Name##" .. currentTab, imgui.ImVec2(294, 264), true, imgui.WindowFlags.HorizontalScrollbar) then
                 if currentTab == 1 then 
-                    imgui.Text(u8"ГЂГЄГІГЁГўГ Г¶ГЁГї ГґГіГ­ГЄГ¶ГЁГ©")
+                    imgui.Text(u8"Активация функций")
                     
                     if imgui.RadioButtonBool(u8"Flood", isActiveFlood) then
                         toggleFlood()
                     end
                     imgui.SameLine()
-                    helpMarker(u8 "ГЏГ®Г¤Г®Г©Г¤ГЁ ГЄ Г«Г ГўГЄГҐ, ГўГ±ГІГ Г­Гј Г°ГїГ¤Г®Г¬ ГЁ ГўГЄГ«ГѕГ·ГЁ Г·ГҐГЄГЎГ®ГЄГ± [Flood].\nГ‹ГЁГЎГ® ГЇГ°Г®Г¦Г¬ГЁ ГЄГ®Г¬ГЎГЁГ­Г Г¶ГЁГѕ [ALT + 2], ГЁГ«ГЁ Г­Г ГЇГЁГёГЁ ГЄГ®Г¬Г Г­Г¤Гі [/lovecl] Гў Г·Г ГІ.\nГ‚Г»ГЎГЁГ°Г Г©, ГЄГ ГЄ ГіГ¤Г®ГЎГ­ГҐГҐ В— ГЅГґГґГҐГЄГІ ГЎГіГ¤ГҐГІ Г®Г¤ГЁГ­.")
+                    helpMarker(u8 "Подойди к лавке, встань рядом и включи чекбокс [Flood].\nЛибо прожми комбинацию [ALT + 2], или напиши команду [/lovecl] в чат.\nВыбирай, как удобнее — эффект будет один.")
                    
                     if imgui.RadioButtonBool(u8"Render", isActiveRender) then
                         toggleRender()
                     end
                     imgui.SameLine()
-                    helpMarker(u8 "Г‚ГЄГ«ГѕГ·Г ГҐГІ Г°ГҐГ­Г¤ГҐГ° Г«Г ГўГ®ГЄ Г­Г  ГЅГЄГ°Г Г­ГҐ.\nГ’Г ГЄГ¦ГҐ Г°ГҐГ­Г¤ГҐГ° Г¬Г®Г¦Г­Г® ГўГЄГ«ГѕГ·ГЁГІГј ГЄГ®Г¬Г Г­Г¤Г®Г©: /render\nГЂ Г±ГЎГ°Г®Г±ГЁГІГј Г­Г Г±ГІГ°Г®Г©ГЄГЁ Г°ГҐГ­Г¤ГҐГ°Г  ГЄГ®Г¬Г Г­Г¤Г®Г©: /resrender")
+                    helpMarker(u8 "Включает рендер лавок на экране.\nТакже рендер можно включить командой: /render\nА сбросить настройки рендера командой: /resrender")
 
                     if imgui.RadioButtonBool(u8"Cleaner", isActiveCleaner) then
                         cleaner()
                     end
                     imgui.SameLine()
-                    helpMarker(u8("ГЋГ·ГЁГ№Г ГҐГІ Г§Г®Г­Гі Г±ГІГ°ГЁГ¬Г  Г®ГІ ГІГ°Г Г­Г±ГЇГ®Г°ГІГ  ГЁ ГЁГЈГ°Г®ГЄГ®Гў.\nГќГІГ® ГЇГ®ГўГ»ГёГ ГҐГІ FPS ГЁ ГіГўГҐГ«ГЁГ·ГЁГўГ ГҐГІ ГёГ Г­Г± ГіГ±ГЇГҐГёГ­Г® Г±Г«Г®ГўГЁГІГј Г«Г ГўГЄГі.\nГ’Г ГЄГ¦ГҐ Г®Г·ГЁГ±ГІГЄГі Г¬Г®Г¦Г­Г® ГўГ»Г§ГўГ ГІГј ГЄГ®Г¬Г Г­Г¤Г®Г©: /clear"))
+                    helpMarker(u8("Очищает зону стрима от транспорта и игроков.\nЭто повышает FPS и увеличивает шанс успешно словить лавку.\nТакже очистку можно вызвать командой: /clear"))
                     
                     if imgui.RadioButtonBool(u8"Luxury", isActiveLuxury) then
                        toggleLuxury()
                     end
                     imgui.SameLine()
-                    helpMarker(u8("Г‚ГЄГ«ГѕГ·Г ГҐГІ Г°ГҐГ¦ГЁГ¬ Г«Г®ГўГ«ГЁ Г«Г Г°Г¶Г®Гў Concept Car Luxury.\nГ’Г ГЄГ¦ГҐ Г°ГҐГ¦ГЁГ¬ Г¬Г®Г¦Г­Г® ГўГЄГ«ГѕГ·ГЁГІГј ГЄГ®Г¬Г Г­Г¤Г®Г©: /luxury"))
+                    helpMarker(u8("Включает режим ловли ларцов Concept Car Luxury.\nТакже режим можно включить командой: /luxury"))
                 end
 
                 if currentTab == 2 then 
-                    imgui.Text(u8"ГЌГ Г±ГІГ°Г®Г©ГЄГЁ" .. " " .. ti.ICON_SETTINGS)
+                    imgui.Text(u8"Настройки" .. " " .. ti.ICON_SETTINGS)
                     imgui.Separator()
 
-                    imgui.Text(u8"Г’ГҐГ¬Г  Г®ГґГ®Г°Г¬Г«ГҐГ­ГЁГї:")
+                    imgui.Text(u8"Тема оформления:")
                     imgui.SameLine()
-                    helpMarker(u8("ГЏГ®Г§ГўГ®Г«ГїГҐГІ ГЁГ§Г¬ГҐГ­ГЁГІГј ГўГ­ГҐГёГ­ГЁГ© ГўГЁГ¤ ГЁГ­ГІГҐГ°ГґГҐГ©Г±Г  Г±ГЄГ°ГЁГЇГІГ .\nГ’ГҐГ¬Г  ГЇГ°ГЁГ¬ГҐГ­ГїГҐГІГ±Гї Г±Г°Г Г§Гі ГЁ Г ГўГІГ®Г¬Г ГІГЁГ·ГҐГ±ГЄГЁ Г±Г®ГµГ°Г Г­ГїГҐГІГ±Гї Гў ГЄГ®Г­ГґГЁГЈ."))
+                    helpMarker(u8("Позволяет изменить внешний вид интерфейса скрипта.\nТема применяется сразу и автоматически сохраняется в конфиг."))
 
                     if imgui.BeginCombo("##ThemeSelector", themes[currentTheme[0] + 1]) then
                         for i, name in ipairs(themes) do
@@ -966,49 +973,49 @@ imgui.OnFrame(
                         imgui.EndCombo()
                     end
 
-                    if imgui.Button(ti.ICON_SETTINGS .. " " .. u8"ГЌГ Г±ГІГ°Г®Г©ГЄГЁ Г«Г ГўГЄГЁ", imgui.ImVec2(130, 25)) then
+                    if imgui.Button(ti.ICON_SETTINGS .. " " .. u8"Настройки лавки", imgui.ImVec2(130, 25)) then
                         LavkaSettingsWindow[0] = not LavkaSettingsWindow[0]
                         if LavkaSettingsWindow[0] then
                             RenderSettings[0] = false
                         end
                     end
 
-                    if imgui.Button(ti.ICON_EYE .. " " .. u8"ГЌГ Г±ГІГ°Г®Г©ГЄГЁ Г°ГҐГ­Г¤ГҐГ°Г ", imgui.ImVec2(145, 25)) then
+                    if imgui.Button(ti.ICON_EYE .. " " .. u8"Настройки рендера", imgui.ImVec2(145, 25)) then
                         RenderSettings[0] = not RenderSettings[0]
                         if RenderSettings[0] then
                             LavkaSettingsWindow[0] = false
                         end
                     end
 
-                    if imgui.Checkbox(ti.ICON_MESSAGE_OFF .. " " .. u8'Г‘ГЄГ°Г»ГўГ ГІГј Г±ГЁГ±ГІГҐГ¬Г­Г»Г© ГґГ«ГіГ¤ Г«Г ГўГЄГЁ', offFloodChatMessage) then
+                    if imgui.Checkbox(ti.ICON_MESSAGE_OFF .. " " .. u8'Скрывать системный флуд лавки', offFloodChatMessage) then
                         ini.main.offFloodChatMessage = offFloodChatMessage[0]
                         inicfg.save(ini, directIni)
                     end
                     imgui.SameLine()
-                    helpMarker(u8 "Г‘ГЄГ°Г»ГўГ ГҐГІ ГЁГ§ Г·Г ГІГ  ГЇГ®ГўГІГ®Г°ГїГѕГ№ГЁГҐГ±Гї Г±Г®Г®ГЎГ№ГҐГ­ГЁГї Г±ГҐГ°ГўГҐГ°Г :\nВ«Г„Г Г­Г­Г Гї Г«Г ГўГЄГ  ГўГ°ГҐГ¬ГҐГ­Г­Г® Г§Г ГЎГ°Г®Г­ГЁГ°Г®ГўГ Г­Г  Г§Г  ГЁГЈГ°Г®ГЄГ®Г¬...В»\nГ·ГІГ®ГЎГ» Г·Г ГІ Г­ГҐ Г§Г ГЎГЁГўГ Г«Г±Гї ГўГ® ГўГ°ГҐГ¬Гї Г«Г®ГўГ«ГЁ.")
+                    helpMarker(u8 "Скрывает из чата повторяющиеся сообщения сервера:\n«Данная лавка временно забронирована за игроком...»\nчтобы чат не забивался во время ловли.")
 
-                    if imgui.Checkbox(ti.ICON_VOLUME_OFF .. " " .. u8'Г’ГЁГµГЁГ© Г°ГҐГ¦ГЁГ¬ (ГЎГҐГ§ Г±Г®Г®ГЎГ№ГҐГ­ГЁГ©)', silentMode) then
+                    if imgui.Checkbox(ti.ICON_VOLUME_OFF .. " " .. u8'Тихий режим (без сообщений)', silentMode) then
                         ini.main.silentMode = silentMode[0]
                         inicfg.save(ini, directIni)
                     end
                     imgui.SameLine()
-                    helpMarker(u8 "ГЏГ°ГЁ ГўГЄГ«ГѕГ·ГҐГ­ГЁГЁ ГЅГІГ®ГЈГ® Г°ГҐГ¦ГЁГ¬Г  Г±ГЄГ°ГЁГЇГІ Г­ГҐ ГўГ»ГўГ®Г¤ГЁГІ Г±ГўГ®ГЁ Г±Г®Г®ГЎГ№ГҐГ­ГЁГї Гў Г·Г ГІ.\nГ‘Г®Г±ГІГ®ГїГ­ГЁГҐ Г±Г®ГµГ°Г Г­ГїГҐГІГ±Гї Гў ГЄГ®Г­ГґГЁГЈГҐ ГЁ Г°Г ГЎГ®ГІГ ГҐГІ ГЇГ®Г±Г«ГҐ ГЇГҐГ°ГҐГ§Г ГЈГ°ГіГ§ГЄГЁ.")
+                    helpMarker(u8 "При включении этого режима скрипт не выводит свои сообщения в чат.\nСостояние сохраняется в конфиге и работает после перезагрузки.")
                     
-                    if imgui.Checkbox(ti.ICON_CURRENT_LOCATION_OFF .. " " .. u8'ГЋГІГЄГ«ГѕГ·ГЁГІГј ГЇГ°Г®ГўГҐГ°ГЄГі Г°Г Г±Г±ГІГ®ГїГ­ГЁГї', disableDistanceCheck) then
+                    if imgui.Checkbox(ti.ICON_CURRENT_LOCATION_OFF .. " " .. u8'Отключить проверку расстояния', disableDistanceCheck) then
                         ini.main.disableDistanceCheck = disableDistanceCheck[0]
                         inicfg.save(ini, directIni)
                     end
                     imgui.SameLine()
-                    helpMarker(u8 "ГЏГ°ГЁ ГўГЄГ«ГѕГ·ГҐГ­ГЁГЁ ГЅГІГ®ГЈГ® Г°ГҐГ¦ГЁГ¬Г  Г±ГЄГ°ГЁГЇГІ ГЇГҐГ°ГҐГ±ГІГ Г­ГҐГІ ГЇГ°Г®ГўГҐГ°ГїГІГј Г°Г Г±Г±ГІГ®ГїГ­ГЁГҐ Г¤Г® Г«Г ГўГЄГЁ.\nГќГІГ® Г¤Г ГҐГІ ГўГЄГ«ГѕГ·Г ГІГј ГґГіГ­ГЄГ¶ГЁГѕ ГґГ«ГіГ¤Г  Г¤Г Г¦ГҐ ГҐГ±Г«ГЁ ГўГ» Г­Г ГµГ®Г¤ГЁГІГҐГ±Гј Г¤Г Г«ГҐГЄГ® Г®ГІ Г«Г ГўГЄГЁ.\nГ‘Г®Г±ГІГ®ГїГ­ГЁГҐ Г±Г®ГµГ°Г Г­ГїГҐГІГ±Гї Гў ГЄГ®Г­ГґГЁГЈ ГЁ Г°Г ГЎГ®ГІГ ГҐГІ ГЇГ®Г±Г«ГҐ ГЇГҐГ°ГҐГ§Г ГЈГ°ГіГ§ГЄГЁ.")
+                    helpMarker(u8 "При включении этого режима скрипт перестанет проверять расстояние до лавки.\nЭто дает включать функцию флуда даже если вы находитесь далеко от лавки.\nСостояние сохраняется в конфиг и работает после перезагрузки.")
 
-                    if imgui.Checkbox(ti.ICON_EYE .. " " .. u8'ГЏГ®ГЄГ Г§Г»ГўГ ГІГј ГўГ°ГҐГ¬Гї Г«Г®ГўГ«ГЁ ГЁ CPS', showFloodStats) then
+                    if imgui.Checkbox(ti.ICON_EYE .. " " .. u8'Показывать время ловли и CPS', showFloodStats) then
                         ini.main.showFloodStats = showFloodStats[0]
                         inicfg.save(ini, directIni)
                     end
                     imgui.SameLine()
-                        helpMarker(u8 "ГЏГ®ГЄГ Г§Г»ГўГ ГҐГІ ГўГ°ГҐГ¬Гї ГІГҐГЄГіГ№ГҐГ© ГЁГ«ГЁ ГЇГ®Г±Г«ГҐГ¤Г­ГҐГ© Г«Г®ГўГ«ГЁ ГЁ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г­Г Г¦Г ГІГЁГ© ALT Г§Г  ГЇГ®Г±Г«ГҐГ¤Г­ГѕГѕ Г±ГҐГЄГіГ­Г¤Гі.")
+                        helpMarker(u8 "Показывает время текущей или последней ловли и количество нажатий ALT за последнюю секунду.")
 
-                    if imgui.Checkbox(ti.ICON_CLOCK_PLAY .. " " .. u8'ГЂГўГІГ®Г¬Г ГІГЁГ·ГҐГ±ГЄГ Гї Г«Г®ГўГ«Гї Luxury', autoLuxuryZavoz) then
+                    if imgui.Checkbox(ti.ICON_CLOCK_PLAY .. " " .. u8'Автоматическая ловля Luxury', autoLuxuryZavoz) then
                         ini.main.autoLuxuryZavoz = autoLuxuryZavoz[0]
                         inicfg.save(ini, directIni)
 
@@ -1021,7 +1028,7 @@ imgui.OnFrame(
                         end
                     end
                     imgui.SameLine()
-                    helpMarker(u8 "ГЏГ°ГЁ ГўГЄГ«ГѕГ·ВёГ­Г­Г®Г¬ Г·ГҐГЄГЎГ®ГЄГ±ГҐ Г±ГЄГ°ГЁГЇГІ Г­Г Г·Г­ВёГІ ГґГ«ГіГ¤ГЁГІГј ГІГ®Г«ГјГЄГ® ГІГ®ГЈГ¤Г , ГЄГ®ГЈГ¤Г  Г±ГЇГ ГўГ­ГїГІГ±Гї Г«Г Г°Г¶Г», ГЁ ГўГ»ГЄГ«ГѕГ·ГЁГІГ±Гї Г±Г Г¬, ГЄГ®ГЈГ¤Г  Г®Г­ГЁ ГЁГ±Г·ГҐГ§Г­ГіГІ.\nГ…Г±Г«ГЁ Г·ГҐГЄГЎГ®ГЄГ± ГўГ»ГЄГ«ГѕГ·ГҐГ­, Г±ГЄГ°ГЁГЇГІ ГЎГіГ¤ГҐГІ ГґГ«ГіГ¤ГЁГІГј ГЇГ®Г±ГІГ®ГїГ­Г­Г®, ГЇГ®ГЄГ  ГўГ» Г­ГҐ ГўГ»ГЄГ«ГѕГ·ГЁГІГҐ ГҐГЈГ® ГўГ°ГіГ·Г­ГіГѕ.")                end
+                    helpMarker(u8 "При включённом чекбоксе скрипт начнёт флудить только тогда, когда спавнятся ларцы, и выключится сам, когда они исчезнут.\nЕсли чекбокс выключен, скрипт будет флудить постоянно, пока вы не выключите его вручную.")                end
             end
             imgui.EndChild()
             imgui.End()
@@ -1029,7 +1036,7 @@ imgui.OnFrame(
         end
 )
 
---[[ ГЋГЄГ­Г® Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГї Г±ГЄГ°ГЁГЇГІГ  ]]
+--[[ Окно обновления скрипта ]]
 imgui.OnFrame(function()
         if wasKeyPressed(vkeys.VK_ESCAPE) then
             windowUpdate[0] = false
@@ -1053,35 +1060,39 @@ imgui.OnFrame(function()
         else
             applyStyleMintGarden()
         end
-        imgui.Begin(u8'ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ Г±ГЄГ°ГЁГЇГІГ ', windowUpdate, imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoCollapse)
+        imgui.Begin(u8'Обновление скрипта', windowUpdate, imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoCollapse)
 
-        imgui.Text(u8('Г‚ГҐГ°Г±ГЁГї: v' .. thisScript().version .. '  ->  v') .. u8(updateVersion))
+        imgui.Text(u8('Версия: v' .. thisScript().version .. '  ->  v') .. u8(updateVersion))
         imgui.Separator()
 
-        imgui.TextColored(imgui.ImVec4(0.0, 0.8, 1.0, 1.0), u8'Г—ГІГ® ГЎГіГ¤ГҐГІ Г®ГЎГ­Г®ГўГ«ГҐГ­Г®:')
+        imgui.TextColored(imgui.ImVec4(0.0, 0.8, 1.0, 1.0), u8'Что будет обновлено:')
 
         imgui.BeginChild('##ChangelogArea', imgui.ImVec2(320, 100), true)
-            imgui.TextWrapped(u8(updateChangelog ~= "" and updateChangelog or "ГЋГЇГЁГ±Г Г­ГЁГҐ ГЁГ§Г¬ГҐГ­ГҐГ­ГЁГ© Г®ГІГ±ГіГІГ±ГІГўГіГҐГІ."))
+        if updateChangelog ~= "" then
+            imgui.TextWrapped(updateChangelog) -- Данные из JSON уже в UTF-8!
+        else
+            imgui.TextWrapped(u8'Описание изменений отсутствует.')
+        end
         imgui.EndChild()
 
         imgui.Separator()
 
-        if imgui.Button(u8'ГЏГ®Г¤ГІГўГҐГ°Г¤ГЁГІГј', imgui.ImVec2(160, 30)) then
-            sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. ' ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ ГЇГ®Г¤ГІГўГҐГ°Г¦Г¤ГҐГ­Г®, Г±ГЄГ Г·ГЁГўГ Г­ГЁГҐ...', -1)
-            startUpdate(updateUrl) -- Г”ГіГ­ГЄГ¶ГЁГї Г±ГЄГ Г·ГЁГўГ Г­ГЁГї .lua ГґГ Г©Г«Г 
+        if imgui.Button(u8'Подтвердить', imgui.ImVec2(160, 30)) then
+            sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. ' Обновление подтверждено, скачивание...', -1)
+            startUpdate(updateUrl) -- Функция скачивания .lua файла
             windowUpdate[0] = false
         end
         
         imgui.SameLine()
         
-        if imgui.Button(u8'ГЋГІГ¬ГҐГ­Г ', imgui.ImVec2(100, 30)) then
+        if imgui.Button(u8'Отмена', imgui.ImVec2(100, 30)) then
             windowUpdate[0] = false
         end
         imgui.End()
         imgui.PopStyleVar()
 end)
 
---[[ ГЋГЄГ­Г®: ГЌГ Г±ГІГ°Г®Г©ГЄГЁ Г«Г ГўГЄГЁ ]]
+--[[ Окно: Настройки лавки ]]
 imgui.OnFrame(function()
     if wasKeyPressed(vkeys.VK_ESCAPE) then
         LavkaSettingsWindow[0] = false
@@ -1108,25 +1119,25 @@ imgui.OnFrame(function()
 
         imgui.Begin("Store Settings", LavkaSettingsWindow, imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoCollapse)
 
-        imgui.Text(ti.ICON_SETTINGS .. " " .. u8"ГЌГ Г±ГІГ°Г®Г©ГЄГ  Г¤Г«Гї Г«Г ГўГЄГЁ")
+        imgui.Text(ti.ICON_SETTINGS .. " " .. u8"Настройка для лавки")
         imgui.SetNextItemWidth(100)
-        if imgui.SliderInt(u8 "Г‡Г Г¤ГҐГ°Г¦ГЄГ  (Г±ГҐГЄ)", delay, 0, 5, u8 "%d Г±ГҐГЄ") then
+        if imgui.SliderInt(u8 "Задержка (сек)", delay, 0, 5, u8 "%d сек") then
             ini.main.delay = delay[0]
             inicfg.save(ini, directIni)
         end
         imgui.SameLine()
-        helpMarker(u8 "Г‡Г¤ГҐГ±Гј Г¬Г®Г¦Г­Г® Г§Г Г¤Г ГІГј Г§Г Г¤ГҐГ°Г¦ГЄГі ГўГўГ®Г¤Г  Г­Г Г§ГўГ Г­ГЁГї Г«Г ГўГЄГЁ\n" ..
-                    u8 "Г“ГЄГ Г§Г»ГўГ ГҐГІГ±Гї Гў Г±ГҐГЄГіГ­Г¤Г Гµ\n" ..
-                    u8 "ГЉГ®ГЈГ¤Г  ГўГ» Г±Г«Г®ГўГЁГІГҐ Г«Г ГўГЄГі, Г±ГЄГ°ГЁГЇГІ ГЇГ®Г¤Г®Г¦Г¤ВёГІ ГіГЄГ Г§Г Г­Г­Г®ГҐ ГўГ°ГҐГ¬Гї\n" ..
-                    u8 "ГЁ ГІГ®Г«ГјГЄГ® ГЇГ®ГІГ®Г¬ ГўГўГҐГ¤ВёГІ Г­Г Г§ГўГ Г­ГЁГҐ")
+        helpMarker(u8 "Здесь можно задать задержку ввода названия лавки\n" ..
+                    u8 "Указывается в секундах\n" ..
+                    u8 "Когда вы словите лавку, скрипт подождёт указанное время\n" ..
+                    u8 "и только потом введёт название")
 
-        imgui.Text(ti.ICON_PENCIL .. " " .. u8"ГЌГ Г§ГўГ Г­ГЁГҐ Г«Г ГўГЄГЁ")
+        imgui.Text(ti.ICON_PENCIL .. " " .. u8"Название лавки")
         imgui.SetNextItemWidth(100)
         
         imgui.InputText("##shop_name", shopNameBuf, 64)
 
         imgui.SameLine()
-        if imgui.Button(u8 "Г‘Г®ГµГ°Г Г­ГЁГІГј", imgui.ImVec2(70, 19)) then
+        if imgui.Button(u8 "Сохранить", imgui.ImVec2(70, 19)) then
             local inputNameUtf8 = ffi.string(shopNameBuf)
             local inputNameCp1251 = u8:decode(inputNameUtf8)
 
@@ -1142,15 +1153,15 @@ imgui.OnFrame(function()
 
         imgui.SameLine()
         helpMarker(
-            u8 "Г‡Г¤ГҐГ±Гј ГўГ» Г¬Г®Г¦ГҐГІГҐ ГўГўГҐГ±ГІГЁ Г­Г Г§ГўГ Г­ГЁГҐ, ГЄГ®ГІГ®Г°Г®ГҐ ГЎГіГ¤ГҐГІ ГЁГ±ГЇГ®Г«ГјГ§Г®ГўГ ГІГјГ±Гї Г¤Г«Гї Г«Г ГўГЄГЁ\n" ..
-            u8 "ГЋГ­Г® Г±Г®ГµГ°Г Г­ГїГҐГІГ±Гї, ГЁ ГўГ Г¬ Г­ГҐ Г­ГіГ¦Г­Г® ГЎГіГ¤ГҐГІ ГўГўГ®Г¤ГЁГІГј ГҐГЈГ® ГЄГ Г¦Г¤Г»Г© Г°Г Г§\n" ..
-            u8 "Г‚Г» Г¬Г®Г¦ГҐГІГҐ ГЁГ§Г¬ГҐГ­ГЁГІГј ГҐГЈГ® Гў Г«ГѕГЎГ®Г© Г¬Г®Г¬ГҐГ­ГІ В— Г·ГҐГ°ГҐГ§ ГЇГ®Г«ГҐ Г±Г«ГҐГўГ \n" ..
-            u8 "ГЁГ«ГЁ Г± ГЇГ®Г¬Г®Г№ГјГѕ ГЄГ®Г¬Г Г­Г¤Г» [/namelavka Г­Г Г§ГўГ Г­ГЁГҐ]")
+            u8 "Здесь вы можете ввести название, которое будет использоваться для лавки\n" ..
+            u8 "Оно сохраняется, и вам не нужно будет вводить его каждый раз\n" ..
+            u8 "Вы можете изменить его в любой момент — через поле слева\n" ..
+            u8 "или с помощью команды [/namelavka название]")
         imgui.Separator()
-        imgui.Text(ti.ICON_PALETTE .. " " .. u8"Г–ГўГҐГІ Г­Г Г§ГўГ Г­ГЁГї Г«Г ГўГЄГЁ:")
+        imgui.Text(ti.ICON_PALETTE .. " " .. u8"Цвет названия лавки:")
 
         imgui.SameLine()
-        helpMarker(u8("Г‚Г» Г¬Г®Г¦ГҐГІГҐ ГўГ»ГЎГ°Г ГІГј Г¶ГўГҐГІ, Гў ГЄГ®ГІГ®Г°Г®Г¬ ГЎГіГ¤ГҐГІ Г®ГІГ®ГЎГ°Г Г¦Г ГІГјГ±Гї Г­Г Г§ГўГ Г­ГЁГҐ Г«Г ГўГЄГЁ: Г¤Г®Г±ГІГіГЇГҐГ­ Г±Г«ГіГ·Г Г©Г­Г»Г© ГўГ»ГЎГ®Г° (Г°Г Г­Г¤Г®Г¬) ГЁГ«ГЁ ГЁГ­Г¤ГЁГўГЁГ¤ГіГ Г«ГјГ­Г Гї Г­Г Г±ГІГ°Г®Г©ГЄГ .\nГЌГ Г±ГІГ°Г®Г©ГЄГЁ Г¶ГўГҐГІГ  Г±Г®ГµГ°Г Г­ГїГѕГІГ±Гї Гў ГЄГ®Г­ГґГЁГЈГҐ ГЁ ГЎГіГ¤ГіГІ Г°Г ГЎГ®ГІГ ГІГј ГЇГ®Г±Г«ГҐ ГЇГҐГ°ГҐГ§Г ГЈГ°ГіГ§ГЄГЁ Г±ГЄГ°ГЁГЇГІГ ."))
+        helpMarker(u8("Вы можете выбрать цвет, в котором будет отображаться название лавки: доступен случайный выбор (рандом) или индивидуальная настройка.\nНастройки цвета сохраняются в конфиге и будут работать после перезагрузки скрипта."))
 
         local curColor = colorList[selectedColor[0] + 1] or colorList[1]
 
@@ -1180,18 +1191,18 @@ imgui.OnFrame(function()
 
         imgui.SameLine()
 
-        if imgui.Checkbox(u8"ГђГ Г­Г¤Г®Г¬", isRandomColor) then
+        if imgui.Checkbox(u8"Рандом", isRandomColor) then
             ini.main.isRandomColor = isRandomColor[0]
             inicfg.save(ini, directIni)
         end
-        if imgui.Checkbox(ti.ICON_SHOPPING_BAG .. " " .. u8'ГЂГўГІГ®ГЇГ°Г®Г¤Г Г¦Г  Г«Г ГўГЄГЁ', autoSell) then
+        if imgui.Checkbox(ti.ICON_SHOPPING_BAG .. " " .. u8'Автопродажа лавки', autoSell) then
             ini.main.autoSell = autoSell[0]
             inicfg.save(ini, directIni)
         end
         imgui.SameLine()
-        helpMarker(u8 "ГЏГ°ГЁ ГўГЄГ«ГѕГ·ГҐГ­Г­Г®Г© Г®ГЇГ¶ГЁГЁ Г«Г ГўГЄГ  Г ГўГІГ®Г¬Г ГІГЁГ·ГҐГ±ГЄГЁ ГўГ»Г±ГІГ ГўГ«ГїГҐГІГ±Гї Г­Г  ГЇГ°Г®Г¤Г Г¦Гі Г±Г°Г Г§Гі ГЇГ®Г±Г«ГҐ ГЇГ®ГЁГ¬ГЄГЁ.\nГ†ГҐГ«Г ГҐГ¬Г Гї Г¶ГҐГ­Г  Г­Г Г±ГІГ°Г ГЁГўГ ГҐГІГ±Гї Гў ГЇГ®Г«ГҐ Г­ГЁГ¦ГҐ.")
+        helpMarker(u8 "При включенной опции лавка автоматически выставляется на продажу сразу после поимки.\nЖелаемая цена настраивается в поле ниже.")
         
-        imgui.Text(u8"Г–ГҐГ­Г  Г ГўГІГ®ГЇГ°Г®Г¤Г Г¦ГЁ (ГЋГЎГ»Г·Г­Г»Г© Г±ГҐГ°ГўГҐГ°):")
+        imgui.Text(u8"Цена автопродажи (Обычный сервер):")
         if imgui.InputInt("##autoSellPriceInput", autoSellPrice) then
             if autoSellPrice[0] < 500000 then autoSellPrice[0] = 500000 end
             if autoSellPrice[0] > 50000000 then autoSellPrice[0] = 50000000 end
@@ -1200,7 +1211,7 @@ imgui.OnFrame(function()
             inicfg.save(ini, directIni)
         end
 
-        imgui.Text(u8"Г–ГҐГ­Г  Г ГўГІГ®ГЇГ°Г®Г¤Г Г¦ГЁ (Vice City):")
+        imgui.Text(u8"Цена автопродажи (Vice City):")
         if imgui.InputInt("##autoSellPriceInputVC", autoSellPriceVC) then
             if autoSellPriceVC[0] < 10000 then autoSellPriceVC[0] = 10000 end
             if autoSellPriceVC[0] > 1000000 then autoSellPriceVC[0] = 1000000 end
@@ -1212,7 +1223,7 @@ imgui.OnFrame(function()
         imgui.PopStyleVar()
 end)
 
---[[ ГЋГЄГ­Г®: ГЌГ Г±ГІГ°Г®Г©ГЄГЁ Г°ГҐГ­Г¤ГҐГ°Г  ]]
+--[[ Окно: Настройки рендера ]]
 imgui.OnFrame(function()
     if wasKeyPressed(vkeys.VK_ESCAPE) then
         RenderSettings[0] = false
@@ -1238,51 +1249,51 @@ imgui.OnFrame(function()
         end
 
         imgui.Begin(u8"Render Settings", RenderSettings, imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoCollapse)
-        imgui.Text(ti.ICON_EYE .. " " .. u8"ГЌГ Г±ГІГ°Г®Г©ГЄГ  Г°ГҐГ­Г¤ГҐГ°Г  Г«Г ГўГ®ГЄ")
+        imgui.Text(ti.ICON_EYE .. " " .. u8"Настройка рендера лавок")
         imgui.Separator()
 
-        if imgui.Checkbox(u8"ГЏГ®ГЄГ Г§Г»ГўГ ГІГј Г«Г ГўГЄГЁ Г­Г  ГЇГ°Г®Г¤Г Г¦ГҐ", searchSellingShops) then
+        if imgui.Checkbox(u8"Показывать лавки на продаже", searchSellingShops) then
             ini.main.searchSellingShops = searchSellingShops[0]
             inicfg.save(ini, directIni)
         end
 
-        if imgui.Checkbox(u8"ГђГҐГ­Г¤ГҐГ° ГўГЄГ«ГѕГ·ВёГ­", renderEnabled) then
+        if imgui.Checkbox(u8"Рендер включён", renderEnabled) then
             toggleRender()
         end
 
         imgui.Separator()
-        imgui.Text(u8"Г‘ГўГ®ГЎГ®Г¤Г­Г»ГҐ Г«Г ГўГЄГЁ")
-        if imgui.ColorEdit4(u8"Г–ГўГҐГІ Г«ГЁГ­ГЁГЁ##renderline", lineColor) then
+        imgui.Text(u8"Свободные лавки")
+        if imgui.ColorEdit4(u8"Цвет линии##renderline", lineColor) then
             saveColorToIni("renderLineColor", lineColor)
         end
-        if imgui.ColorEdit4(u8"Г–ГўГҐГІ ГІГҐГЄГ±ГІГ ##rendertext", textColor) then
+        if imgui.ColorEdit4(u8"Цвет текста##rendertext", textColor) then
             saveColorToIni("renderTextColor", textColor)
         end
-        if imgui.Button(u8"Г‘ГЎГ°Г®Г±ГЁГІГј Г¶ГўГҐГІ Г±ГўГ®ГЎГ®Г¤Г­Г»Гµ") then
+        if imgui.Button(u8"Сбросить цвет свободных") then
             resetColorToDefault(lineColor, defaultLineColor, "renderLineColor")
             resetColorToDefault(textColor, defaultTextColor, "renderTextColor")
         end
 
         imgui.Separator()
-        imgui.Text(u8"Г‹Г ГўГЄГЁ Г­Г  ГЇГ°Г®Г¤Г Г¦ГҐ")
-        if imgui.ColorEdit4(u8"Г–ГўГҐГІ Г«ГЁГ­ГЁГЁ##saleline", saleLineColor) then
+        imgui.Text(u8"Лавки на продаже")
+        if imgui.ColorEdit4(u8"Цвет линии##saleline", saleLineColor) then
             saveColorToIni("saleLineColor", saleLineColor)
         end
-        if imgui.ColorEdit4(u8"Г–ГўГҐГІ ГІГҐГЄГ±ГІГ ##saletext", saleTextColor) then
+        if imgui.ColorEdit4(u8"Цвет текста##saletext", saleTextColor) then
             saveColorToIni("saleTextColor", saleTextColor)
         end
-        if imgui.Button(u8"Г‘ГЎГ°Г®Г±ГЁГІГј Г¶ГўГҐГІ ГЇГ°Г®Г¤Г Г¦ГЁ") then
+        if imgui.Button(u8"Сбросить цвет продажи") then
             resetColorToDefault(saleLineColor, defaultSaleLineColor, "saleLineColor")
             resetColorToDefault(saleTextColor, defaultSaleTextColor, "saleTextColor")
         end
 
-        if imgui.SliderFloat(u8"Г’Г®Г«Г№ГЁГ­Г  Г«ГЁГ­ГЁГЁ", lineThickness, 0.5, 5.0, u8"%.1f") then
+        if imgui.SliderFloat(u8"Толщина линии", lineThickness, 0.5, 5.0, u8"%.1f") then
             ini.main.renderLineThickness = lineThickness[0]
             inicfg.save(ini, directIni)
         end
 
         imgui.Separator()
-        if imgui.Button(ti.ICON_REFRESH .. " " .. u8"ГЋГЎГ­Г®ГўГЁГІГј Г±ГЇГЁГ±Г®ГЄ Г«Г ГўГ®ГЄ", imgui.ImVec2(180, 28)) then
+        if imgui.Button(ti.ICON_REFRESH .. " " .. u8"Обновить список лавок", imgui.ImVec2(180, 28)) then
             resetRender()
         end
 
@@ -1290,7 +1301,7 @@ imgui.OnFrame(function()
         imgui.PopStyleVar()
     end)
 
---[[ ГЋГЄГ­Г®: Donate ]]
+--[[ Окно: Donate ]]
 imgui.OnFrame(function()
     if wasKeyPressed(vkeys.VK_ESCAPE) then
         showDonateWindowFlag[0] = false
@@ -1317,13 +1328,13 @@ end, function()
     end
 
     imgui.PushStyleVarVec2(imgui.StyleVar.WindowTitleAlign, imgui.ImVec2(0.5, 0.5))
-    local isBegin = imgui.Begin(ti.ICON_HEART .. " " .. u8"Г„Г®Г­Г ГІ###DonateWin", showDonateWindowFlag, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse)
+    local isBegin = imgui.Begin(ti.ICON_HEART .. " " .. u8"Донат###DonateWin", showDonateWindowFlag, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse)
     imgui.PopStyleVar()
 
     if isBegin then
         imgui.Spacing()
         
-        local titleText = ti.ICON_COFFEE .. " " .. u8"ГЏГ®Г¤Г¤ГҐГ°Г¦ГЄГ  Г ГўГІГ®Г°Г "
+        local titleText = ti.ICON_COFFEE .. " " .. u8"Поддержка автора"
         imgui.SetCursorPosX((imgui.GetWindowWidth() - imgui.CalcTextSize(titleText).x) / 2)
         imgui.TextDisabled(titleText)
         
@@ -1337,13 +1348,13 @@ end, function()
             imgui.Image(qrTexture, imgui.ImVec2(qrSize, qrSize))
             
             if imgui.IsItemHovered() then
-                imgui.SetTooltip(u8"ГЋГІГ±ГЄГ Г­ГЁГ°ГіГ©ГІГҐ QR-ГЄГ®Г¤ ГЄГ Г¬ГҐГ°Г®Г© ГІГҐГ«ГҐГґГ®Г­Г ")
+                imgui.SetTooltip(u8"Отсканируйте QR-код камерой телефона")
             end
         else
             imgui.SetCursorPosX((imgui.GetWindowWidth() - qrSize) / 2)
             if imgui.BeginChild("ErrorQR", imgui.ImVec2(qrSize, qrSize), true) then
-                local errText1 = u8"QR-ГЄГ®Г¤"
-                local errText2 = u8"Г­ГҐ Г­Г Г©Г¤ГҐГ­"
+                local errText1 = u8"QR-код"
+                local errText2 = u8"не найден"
                 
                 imgui.SetCursorPosY((qrSize - imgui.CalcTextSize(errText1).y * 2) / 2 - 5)
                 
@@ -1360,9 +1371,9 @@ end, function()
         imgui.Spacing()
         imgui.Spacing()
 
-        local desc1 = u8"ГЋГІГ±ГЄГ Г­ГЁГ°ГіГ©ГІГҐ QR-ГЄГ®Г¤"
-        local desc2 = u8"ГЁГ«ГЁ Г­Г Г¦Г¬ГЁГІГҐ ГЄГ­Г®ГЇГЄГі Г­ГЁГ¦ГҐ"
-        local desc3 = u8"Г¤Г«Гї ГЇГҐГ°ГҐГµГ®Г¤Г  Г­Г  Г±ГІГ°Г Г­ГЁГ¶Гі Г¤Г®Г­Г ГІГ ."
+        local desc1 = u8"Отсканируйте QR-код"
+        local desc2 = u8"или нажмите кнопку ниже"
+        local desc3 = u8"для перехода на страницу доната."
         
         imgui.SetCursorPosX((imgui.GetWindowWidth() - imgui.CalcTextSize(desc1).x) / 2)
         imgui.Text(desc1)
@@ -1377,18 +1388,18 @@ end, function()
         imgui.Separator()
         imgui.Spacing()
 
-        if imgui.Button(ti.ICON_HEART .. " " .. u8"ГЋГІГЄГ°Г»ГІГј DonateAlerts", imgui.ImVec2(-1, 35)) then
+        if imgui.Button(ti.ICON_HEART .. " " .. u8"Открыть DonateAlerts", imgui.ImVec2(-1, 35)) then
             os.execute('start "" "' .. donatalertsURL .. '"')
         end
         if imgui.IsItemHovered() then
-            imgui.SetTooltip(u8"ГЋГІГЄГ°Г»ГІГј Г±ГІГ°Г Г­ГЁГ¶Гі Г¤Г®Г­Г ГІГ  Гў ГЎГ°Г ГіГ§ГҐГ°ГҐ")
+            imgui.SetTooltip(u8"Открыть страницу доната в браузере")
         end
 
         imgui.End()
     end
 end)
 
---[[ ГЋГЄГ­Г®: ГЁГ­ГґГ®Г°Г¬Г Г¶ГЁГї Г® Г±ГЄГ°ГЁГЇГІГҐ ]]
+--[[ Окно: информация о скрипте ]]
 imgui.OnFrame(function()
     if wasKeyPressed(vkeys.VK_ESCAPE) then
         InfoWindow[0] = false
@@ -1414,103 +1425,103 @@ end, function()
             applyStyleMintGarden()
     end
 
-    imgui.Begin(u8 "Г€Г­ГґГ®Г°Г¬Г Г¶ГЁГї", InfoWindow, imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoCollapse)
+    imgui.Begin(u8 "Информация", InfoWindow, imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoCollapse)
 
     imgui.PushTextWrapPos(0)
-    imgui.Text(u8 "Г‘ГЄГ°ГЁГЇГІ:" .. nameScript .. " v2.1")
-    imgui.Text(u8 "ГЂГўГІГ®Г°: Koora")
+    imgui.Text(u8 "Скрипт:" .. nameScript .. " v2.1")
+    imgui.Text(u8 "Автор: Koora")
     imgui.Text(u8 " ")
-    imgui.Text(u8 "ГЋГЏГ€Г‘ГЂГЌГ€Г…:")
-    imgui.BulletText(u8 "ГђГҐГ­Г¤ГҐГ° Г±ГўГ®ГЎГ®Г¤Г­Г»Гµ Г«Г ГўГ®ГЄ ГЁ Г«Г ГўГ®ГЄ Г­Г  ГЇГ°Г®Г¤Г Г¦Гі")
-    imgui.BulletText(u8 "Г’Г Г©Г¬ГҐГ° Г®ГЄГ®Г­Г·Г Г­ГЁГї ГЎГ°Г®Г­ГЁ")
-    imgui.BulletText(u8 "ГЋГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ ГўГ°ГҐГ¬ГҐГ­ГЁ ГІГҐГЄГіГ№ГҐГ© Г«Г®ГўГ«ГЁ ГЁ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ  Г­Г Г¦Г ГІГЁГ© ALT Гў Г±ГҐГЄГіГ­Г¤Гі (CPS)")
-    imgui.BulletText(u8 "ГЌГ Г±ГІГ°Г®Г©ГЄГ  Г§Г Г¤ГҐГ°Г¦ГЄГЁ ГўГ»Г±ГІГ ГўГ«ГҐГ­ГЁГї Г­Г Г§ГўГ Г­ГЁГї")
-    imgui.BulletText(u8 "Г‚Г®Г§Г¬Г®Г¦Г­Г®Г±ГІГј Г®ГІГЄГ«ГѕГ·ГЁГІГј ГЇГ°Г®ГўГҐГ°ГЄГі Г°Г Г±Г±ГІГ®ГїГ­ГЁГї Г¤Г® Г«Г ГўГЄГЁ")
-    imgui.BulletText(u8 "ГЌГ Г±ГІГ°Г®Г©ГЄГ  Г¶ГўГҐГІГ  Г«ГЁГ­ГЁГЁ ГЁ ГІГҐГЄГ±ГІГ ")
-    imgui.BulletText(u8 "ГЋГІГ¤ГҐГ«ГјГ­Г®ГҐ Г®ГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ ГЁ Г­Г Г±ГІГ°Г®Г©ГЄГ  Г¶ГўГҐГІГ®Гў Г«Г ГўГ®ГЄ, ГўГ»Г±ГІГ ГўГ«ГҐГ­Г­Г»Гµ Г­Г  ГЇГ°Г®Г¤Г Г¦Гі")
-    imgui.BulletText(u8 "ГЌГ Г±ГІГ°Г®Г©ГЄГ  ГІГ®Г«Г№ГЁГ­Г» Г«ГЁГ­ГЁГ© Г°ГҐГ­Г¤ГҐГ°Г ")
-    imgui.BulletText(u8 "ГЋГІГЄГ«ГѕГ·ГҐГ­ГЁГҐ Г°ГҐГ­Г¤ГҐГ°Г  Г¤Г«Гї Г«Г ГўГ®ГЄ Г­Г  ГЇГ°Г®Г¤Г Г¦ГҐ")
-    imgui.BulletText(u8 "ГЋГ·ГЁГ±ГІГЁГІГҐГ«Гј Г±ГІГ°ГЁГ¬Г : ГіГ¤Г Г«ГїГҐГІ ГІГ°Г Г­Г±ГЇГ®Г°ГІ ГЁ ГЁГЈГ°Г®ГЄГ®Гў Г¤Г«Гї ГЇГ®ГўГ»ГёГҐГ­ГЁГї FPS (Г ГЄГІГЁГўГ Г¶ГЁГї Г·ГҐГ°ГҐГ§ /clear ГЁГ«ГЁ Г¬ГҐГ­Гѕ).")
-    imgui.BulletText(u8 "ГЂГўГІГ®Г¬Г ГІГЁГ·ГҐГ±ГЄГ®ГҐ Г­Г Г§ГўГ Г­ГЁГҐ Г«Г ГўГЄГЁ (Г¬Г®Г¦Г­Г® ГўГўГ®Г¤ГЁГІГј Г·ГҐГ°ГҐГ§ Г®ГЄГ­Г® ГЁГ«ГЁ Г± ГЇГ®Г¬Г®Г№ГјГѕ ГЄГ®Г¬Г Г­Г¤Г» /namelavka)")
-    imgui.BulletText(u8 "Г‚Г®Г§Г¬Г®Г¦Г­Г®Г±ГІГј Г­Г Г·Г ГІГј ГґГ«ГіГ¤ ГўГ®Г§Г«ГҐ Г«Г ГўГЄГЁ: ГЄГ®Г¬Г Г­Г¤Г  /lovecl, ГЄГ®Г¬ГЎГЁГ­Г Г¶ГЁГї ALT + 2 ГЁГ«ГЁ Г·ГҐГ°ГҐГ§ Г¬ГҐГ­Гѕ")
-    imgui.BulletText(u8 "ГЂГЄГІГЁГўГ Г¶ГЁГї Г¬ГҐГ­Гѕ: ALT + 1 ГЁГ«ГЁ ГЄГ®Г¬Г Г­Г¤Г  /lmenu")
-    imgui.BulletText(u8 "Г“Г¤Г Г«ВёГ­ Г±ГЇГ Г¬ Гў Г·Г ГІГҐ (В«Г„Г Г­Г­Г Гї Г«Г ГўГЄГ  Г§Г ГЎГ°Г®Г­ГЁГ°Г®ГўГ Г­Г В»); Г­Г Г±ГІГ°Г®Г©ГЄГ  Г±ГЄГ°Г»ГІГЁГї Г­Г ГµГ®Г¤ГЁГІГ±Гї Гў Г¬ГҐГ­Гѕ.")
-    imgui.BulletText(u8 "ГЉГ®Г¬Г Г­Г¤Г  /render Г¤Г«Гї ГўГЄГ«ГѕГ·ГҐГ­ГЁГї Г°ГҐГ­Г¤ГҐГ°Г  (ГІГ ГЄГ¦ГҐ Г¤Г®Г±ГІГіГЇГ­Г® Гў Г¬ГҐГ­Гѕ)")
-    imgui.BulletText(u8 "ГЉГ®Г¬Г Г­Г¤Г  /resrender Г¤Г«Гї ГЇГҐГ°ГҐГ§Г ГЈГ°ГіГ§ГЄГЁ Г°ГҐГ­Г¤ГҐГ°Г ")
-        imgui.BulletText(u8 "ГЏГ°ГЁГ±ГіГІГ±ГІГўГіГҐГІ Г ГўГІГ®ГЇГ°Г®Г¤Г Г¦Г  Г«Г ГўГЄГЁ ГЇГ®Г±Г«ГҐ ГЇГ®ГЁГ¬ГЄГЁ Г± Г­Г Г±ГІГ°Г®Г©ГЄГ®Г© Г¶ГҐГ­Г»")
+    imgui.Text(u8 "ОПИСАНИЕ:")
+    imgui.BulletText(u8 "Рендер свободных лавок и лавок на продажу")
+    imgui.BulletText(u8 "Таймер окончания брони")
+    imgui.BulletText(u8 "Отображение времени текущей ловли и количества нажатий ALT в секунду (CPS)")
+    imgui.BulletText(u8 "Настройка задержки выставления названия")
+    imgui.BulletText(u8 "Возможность отключить проверку расстояния до лавки")
+    imgui.BulletText(u8 "Настройка цвета линии и текста")
+    imgui.BulletText(u8 "Отдельное отображение и настройка цветов лавок, выставленных на продажу")
+    imgui.BulletText(u8 "Настройка толщины линий рендера")
+    imgui.BulletText(u8 "Отключение рендера для лавок на продаже")
+    imgui.BulletText(u8 "Очиститель стрима: удаляет транспорт и игроков для повышения FPS (активация через /clear или меню).")
+    imgui.BulletText(u8 "Автоматическое название лавки (можно вводить через окно или с помощью команды /namelavka)")
+    imgui.BulletText(u8 "Возможность начать флуд возле лавки: команда /lovecl, комбинация ALT + 2 или через меню")
+    imgui.BulletText(u8 "Активация меню: ALT + 1 или команда /lmenu")
+    imgui.BulletText(u8 "Удалён спам в чате («Данная лавка забронирована»); настройка скрытия находится в меню.")
+    imgui.BulletText(u8 "Команда /render для включения рендера (также доступно в меню)")
+    imgui.BulletText(u8 "Команда /resrender для перезагрузки рендера")
+        imgui.BulletText(u8 "Присутствует автопродажа лавки после поимки с настройкой цены")
         imgui.SameLine()
-        helpMarker(u8"Г–ГҐГ­Г  Г¤Г«Гї Г®ГЎГ»Г·Г­Г®ГЈГ® Г±ГҐГ°ГўГҐГ°Г : Г®ГІ 500 000 Г¤Г® 50 000 000. Г–ГҐГ­Г  Г¤Г«Гї Vice City: Г®ГІ 10 000 Г¤Г® 1 000 000. ГЋГЎГҐ Г¶ГҐГ­Г» Г­Г Г±ГІГ°Г ГЁГўГ ГѕГІГ±Гї Гў Г¬ГҐГ­Гѕ.")
-    imgui.BulletText(u8 "Г‚Г®Г§Г¬Г®Г¦Г­Г®Г±ГІГј ГўГ»ГЎГ®Г°Г  Г¶ГўГҐГІГ  Г­Г Г§ГўГ Г­ГЁГї Г«Г ГўГЄГЁ ГўГ°ГіГ·Г­ГіГѕ ГЁГ«ГЁ Г±Г«ГіГ·Г Г©Г­Г® (ГІГ ГЄГ¦ГҐ Г¤Г®Г±ГІГіГЇГ­Г® Гў Г¬ГҐГ­Гѕ)")
-    imgui.BulletText(u8 "Г‚Г®Г§Г¬Г®Г¦Г­Г®Г±ГІГј ГўГ»ГЎГ®Г°Г  ГІГҐГ¬Г» Г®ГґГ®Г°Г¬Г«ГҐГ­ГЁГї ГЁГ­ГІГҐГ°ГґГҐГ©Г±Г  (ГІГ ГЄГ¦ГҐ Г¤Г®Г±ГІГіГЇГ­Г® Гў Г¬ГҐГ­Гѕ)")
-    imgui.BulletText(u8 "Г‚Г®Г§Г¬Г®Г¦Г­Г®Г±ГІГј ГўГЄГ«ГѕГ·ГЁГІГј ГІГЁГµГЁГ© Г°ГҐГ¦ГЁГ¬ ГЎГҐГ§ Г±Г®Г®ГЎГ№ГҐГ­ГЁГ© Г±ГЄГ°ГЁГЇГІГ  Гў Г·Г ГІ В— Г±Г®ГµГ°Г Г­ГїГҐГІГ±Гї Гў ГЄГ®Г­ГґГЁГЈГҐ ГЁ Г°Г ГЎГ®ГІГ ГҐГІ ГЇГ®Г±Г«ГҐ ГЇГҐГ°ГҐГ§Г ГЈГ°ГіГ§ГЄГЁ.")
-    imgui.BulletText(u8"Г‚Г®Г§Г¬Г®Г¦Г­Г®Г±ГІГј ГўГЄГ«ГѕГ·ГЁГІГј Г«Г®ГўГ«Гѕ Г«Г Г°Г¶Г®Гў Concept Car Luxury Г·ГҐГ°ГҐГ§ Г¬ГҐГ­Гѕ ГЁГ«ГЁ ГЄГ®Г¬Г Г­Г¤Г®Г© /luxury")
-    imgui.BulletText(u8"ГЂГўГІГ®Г¬Г ГІГЁГ·ГҐГ±ГЄГЁГ© ГґГ«ГіГ¤ ГЇГ® ГўГ°ГҐГ¬ГҐГ­ГЁ Г±ГЇГ ГўГ­Г  Г«Г Г°Г¶Г®Гў")
+        helpMarker(u8"Цена для обычного сервера: от 500 000 до 50 000 000. Цена для Vice City: от 10 000 до 1 000 000. Обе цены настраиваются в меню.")
+    imgui.BulletText(u8 "Возможность выбора цвета названия лавки вручную или случайно (также доступно в меню)")
+    imgui.BulletText(u8 "Возможность выбора темы оформления интерфейса (также доступно в меню)")
+    imgui.BulletText(u8 "Возможность включить тихий режим без сообщений скрипта в чат — сохраняется в конфиге и работает после перезагрузки.")
+    imgui.BulletText(u8"Возможность включить ловлю ларцов Concept Car Luxury через меню или командой /luxury")
+    imgui.BulletText(u8"Автоматический флуд по времени спавна ларцов")
     imgui.SameLine()
-    helpMarker(u8"ГЏГ°ГЁ ГўГЄГ«ГѕГ·ВёГ­Г­Г®Г¬ Г·ГҐГЄГЎГ®ГЄГ±ГҐ Г±ГЄГ°ГЁГЇГІ Г­Г Г·Г­ВёГІ ГґГ«ГіГ¤ГЁГІГј ГІГ®Г«ГјГЄГ® ГІГ®ГЈГ¤Г , ГЄГ®ГЈГ¤Г  Г±ГЇГ ГўГ­ГїГІГ±Гї Г«Г Г°Г¶Г», ГЁ ГўГ»ГЄГ«ГѕГ·ГЁГІГ±Гї Г±Г Г¬, ГЄГ®ГЈГ¤Г  Г®Г­ГЁ ГЁГ±Г·ГҐГ§Г­ГіГІ.\nГ…Г±Г«ГЁ Г·ГҐГЄГЎГ®ГЄГ± ГўГ»ГЄГ«ГѕГ·ГҐГ­, Г±ГЄГ°ГЁГЇГІ ГЎГіГ¤ГҐГІ ГґГ«ГіГ¤ГЁГІГј ГЇГ®Г±ГІГ®ГїГ­Г­Г®, ГЇГ®ГЄГ  ГўГ» Г­ГҐ ГўГ»ГЄГ«ГѕГ·ГЁГІГҐ ГҐГЈГ® ГўГ°ГіГ·Г­ГіГѕ.")
+    helpMarker(u8"При включённом чекбоксе скрипт начнёт флудить только тогда, когда спавнятся ларцы, и выключится сам, когда они исчезнут.\nЕсли чекбокс выключен, скрипт будет флудить постоянно, пока вы не выключите его вручную.")
 
     imgui.Text(u8 " ")
 
-    imgui.Text(u8 "ГѓГЋГђГџГ—Г€Г… ГЉГ‹ГЂГ‚Г€ГГ€:")
+    imgui.Text(u8 "ГОРЯЧИЕ КЛАВИШИ:")
     imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "Alt + 1")
     imgui.SameLine()
-    imgui.Text(u8 "В— Г®ГІГЄГ°Г»ГІГј/Г§Г ГЄГ°Г»ГІГј Г¬ГҐГ­Гѕ Г±ГЄГ°ГЁГЇГІГ .")
+    imgui.Text(u8 "— открыть/закрыть меню скрипта.")
 
     imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "Alt + 2")
     imgui.SameLine()
-    imgui.Text(u8 "В— ГўГЄГ«ГѕГ·ГЁГІГј/ГўГ»ГЄГ«ГѕГ·ГЁГІГј ГґГ«ГіГ¤ (Г«Г®ГўГ«Гѕ Г«Г ГўГЄГЁ).")
+    imgui.Text(u8 "— включить/выключить флуд (ловлю лавки).")
 
     imgui.Text(u8 " ")
 
-    imgui.Text(u8 "ГЉГЋГЊГЂГЌГ„Г›:")
+    imgui.Text(u8 "КОМАНДЫ:")
     imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "/lovecl")
     imgui.SameLine()
-    imgui.Text(u8 "В— Г‚ГЄГ«ГѕГ·ГЁГІГј/ГўГ»ГЄГ«ГѕГ·ГЁГІГј Г«Г®ГўГ«Гѕ.")
+    imgui.Text(u8 "— Включить/выключить ловлю.")
 
     imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "/lmenu")
     imgui.SameLine()
-    imgui.Text(u8 "В— ГЋГІГЄГ°Г»ГІГј ГЈГ«Г ГўГ­Г®ГҐ Г¬ГҐГ­Гѕ.")
+    imgui.Text(u8 "— Открыть главное меню.")
 
     imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "/render")
     imgui.SameLine()
-    imgui.Text(u8 "В— Г‚ГЄГ«ГѕГ·ГЁГІГј/ГўГ»ГЄГ«ГѕГ·ГЁГІГј Г°ГҐГ­Г¤ГҐГ°.")
+    imgui.Text(u8 "— Включить/выключить рендер.")
 
     imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "/resrender")
     imgui.SameLine()
-    imgui.Text(u8 "В— ГЏГҐГ°ГҐГ§Г ГЈГ°ГіГ§ГЁГІГј Г°ГҐГ­Г¤ГҐГ°.")
+    imgui.Text(u8 "— Перезагрузить рендер.")
 
-    imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8 "/namelavka [Г­Г Г§ГўГ Г­ГЁГҐ]")
+    imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8 "/namelavka [название]")
     imgui.SameLine()
-    imgui.Text(u8 "В— Г“Г±ГІГ Г­Г®ГўГЁГІГј ГЁГ¬Гї Г«Г ГўГЄГЁ.")
+    imgui.Text(u8 "— Установить имя лавки.")
 
     imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "/clear")
     imgui.SameLine()
-    imgui.Text(u8 "В— Г“Г¤Г Г«ГЁГІГј ГІГ°Г Г­Г±ГЇГ®Г°ГІ ГЁ ГЁГЈГ°Г®ГЄГЁ (ГЇГ®ГўГ»ГёГҐГ­ГЁГҐ FPS).")
+    imgui.Text(u8 "— Удалить транспорт и игроки (повышение FPS).")
 
     imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "/luxury")
     imgui.SameLine()
-    imgui.Text(u8 "В— Г‚ГЄГ«ГѕГ·ГЁГІГј/ГўГ»ГЄГ«ГѕГ·ГЁГІГј Г«Г®ГўГ«Гѕ Г«Г Г°Г¶Г®Гў Concept Car Luxury.")
+    imgui.Text(u8 "— Включить/выключить ловлю ларцов Concept Car Luxury.")
 
     imgui.Text(u8 " ")
 
-    imgui.Text(u8 "Г’ГђГ…ГЃГЋГ‚ГЂГЌГ€Гџ:")
-    imgui.BulletText(u8 "ГЋГЎГїГ§Г ГІГҐГ«ГјГ­Г® ГіГЄГ Г§Г ГІГј Г­Г Г§ГўГ Г­ГЁГҐ Г«Г ГўГЄГЁ ГЇГҐГ°ГҐГ¤ Г«Г®ГўГ«ГҐГ©.")
-    imgui.BulletText(u8 "ГЌГ Г§ГўГ Г­ГЁГҐ Г¤Г®Г«Г¦Г­Г® ГЎГ»ГІГј Г®ГІ 3 Г¤Г® 20 Г±ГЁГ¬ГўГ®Г«Г®Гў.")
+    imgui.Text(u8 "ТРЕБОВАНИЯ:")
+    imgui.BulletText(u8 "Обязательно указать название лавки перед ловлей.")
+    imgui.BulletText(u8 "Название должно быть от 3 до 20 символов.")
 
     imgui.Text(u8 " ")
 
     imgui.Text(u8 " ")
-    imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8 "ГЋГ’ГЉГЂГ‡ ГЋГ’ ГЋГ’Г‚Г…Г’Г‘Г’Г‚Г…ГЌГЌГЋГ‘Г’Г€:")
-    imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(1, 0, 0, 1)) -- ГЄГ°Г Г±Г­Г»Г© ГІГҐГЄГ±ГІ
+    imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8 "ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ:")
+    imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(1, 0, 0, 1)) -- красный текст
     imgui.BulletText(
-        u8 "ГЂГўГІГ®Г° Г­ГҐ Г­ГҐГ±ВёГІ Г®ГІГўГҐГІГ±ГІГўГҐГ­Г­Г®Г±ГІГЁ Г§Г  ГўГ®Г§Г¬Г®Г¦Г­Г»ГҐ ГЇГ®Г±Г«ГҐГ¤Г±ГІГўГЁГї ГЁГ±ГЇГ®Г«ГјГ§Г®ГўГ Г­ГЁГї Г±ГЄГ°ГЁГЇГІГ .")
-    imgui.BulletText(u8 "Г€Г±ГЇГ®Г«ГјГ§ГіГ©ГІГҐ Г­Г  Г±ГўГ®Г© Г±ГІГ°Г Гµ ГЁ Г°ГЁГ±ГЄ.")
+        u8 "Автор не несёт ответственности за возможные последствия использования скрипта.")
+    imgui.BulletText(u8 "Используйте на свой страх и риск.")
     imgui.PopStyleColor()
 
     imgui.Text(u8 " ")
-    imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8 "Г…Г±Г«ГЁ ГЇГ°Г®ГҐГЎГ Г« Г·ГІГ® ГІГ® Г¤Г Г©ГІГҐ Г§Г­Г ГІГј.")
-    imgui.Text(u8 "Г‘Г‚ГџГ‡Гњ:")
+    imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8 "Если проебал что то дайте знать.")
+    imgui.Text(u8 "СВЯЗЬ:")
     imgui.SameLine()
-    if imgui.Button(u8 "Г’ГҐГ¬Г  Г­Г  BlastHack") then
+    if imgui.Button(u8 "Тема на BlastHack") then
         os.execute("start https://www.blast.hk/threads/233895/")
     end
 
@@ -1528,7 +1539,7 @@ end, function()
     imgui.SetWindowFontScale(1.0)
 
     if imgui.IsItemHovered() then
-        imgui.SetTooltip(u8"ГЏГ®Г¤Г¤ГҐГ°Г¦Г ГІГј Г°Г Г§Г°Г ГЎГ®ГІГ·ГЁГЄГ ")
+        imgui.SetTooltip(u8"Поддержать разработчика")
     end
 
     imgui.PopTextWrapPos()
@@ -1536,7 +1547,7 @@ end, function()
     imgui.End()
 end)
 
---[[ ГЋГІГЇГ°Г ГўГ«ГїГҐГІ Г­Г Г¦Г ГІГЁГҐ ГЄГ«Г ГўГЁГёГЁ Гў ГЁГЈГ°Гі ]]
+--[[ Отправляет нажатие клавиши в игру ]]
 function sendkey(keyCode)
     local _, id = sampGetPlayerIdByCharHandle(PLAYER_PED)
     local mem = allocateMemory(68)
@@ -1557,15 +1568,15 @@ function sendkey(keyCode)
     freeMemory(mem)
 end
 
---[[ Г‚ГЄГ«ГѕГ·Г ГҐГІ ГЁГ«ГЁ ГўГ»ГЄГ«ГѕГ·Г ГҐГІ Г«Г®ГўГ«Гѕ Г±ГўГ®ГЎГ®Г¤Г­Г®Г© Г«Г ГўГЄГЁ ]]
+--[[ Включает или выключает ловлю свободной лавки ]]
 function toggleFlood()
     if shopName == nil or shopName == "" then
-        sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. " ГЋГёГЁГЎГЄГ : Г­ГҐГ«ГјГ§Гї ГўГЄГ«ГѕГ·ГЁГІГј Г±ГЄГ°ГЁГЇГІ ГЎГҐГ§ Г­Г Г§ГўГ Г­ГЁГї Г«Г ГўГЄГЁ! Г‚ГўГҐГ¤ГЁГІГҐ /namelavka [Г­Г Г§ГўГ Г­ГЁГҐ].")
+        sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. " Ошибка: нельзя включить скрипт без названия лавки! Введите /namelavka [название].")
         return
     end
 
     if not disableDistanceCheck[0] and not isNearObject(19475) then
-        sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. " Г‚Г» Г¤Г Г«ГҐГЄГ® Г®ГІ Г«Г ГўГЄГЁ!", -1)
+        sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. " Вы далеко от лавки!", -1)
         return
     end
 
@@ -1587,13 +1598,13 @@ function toggleFlood()
         floodElapsedMs = math.max(0, getGameTimer() - floodStartedAt)
     end
 
-    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. " Г‹Г®ГўГ«Гї Г«Г ГўГ®ГЄ: " .. (isActiveFlood and colors.greenBright .. "Г‚ГЉГ‹" or colors.redLower .. "Г‚Г›ГЉГ‹"))
+    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. " Ловля лавок: " .. (isActiveFlood and colors.greenBright .. "ВКЛ" or colors.redLower .. "ВЫКЛ"))
 
     if isActiveFlood then
         lua_thread.create(function()
             while isActiveFlood do
                 if not disableDistanceCheck[0] and not isNearObject(19475) then
-                    sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. " Г‚Г» Г®ГІГ®ГёГ«ГЁ Г®ГІ Г«Г ГўГЄГЁ. Г”Г«ГіГ¤ ГўГ»ГЄГ«ГѕГ·ГҐГ­.", -1)
+                    sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. " Вы отошли от лавки. Флуд выключен.", -1)
                     if floodStartedAt > 0 then
                         floodElapsedMs = math.max(0, getGameTimer() - floodStartedAt)
                     end
@@ -1610,7 +1621,7 @@ function toggleFlood()
 
                 if cef.IsDialogActive() then
                     local text = cef.GetDialogText()
-                    if text and text:find("Г‘ГІГ®ГЁГ¬Г®Г±ГІГј Г Г°ГҐГ­Г¤Г» Г«Г ГўГЄГЁ") then
+                    if text and text:find("Стоимость аренды лавки") then
                         isSpammingAlt = false
                         cef.CloseWithButton(1)
                         wait(100)
@@ -1622,7 +1633,7 @@ function toggleFlood()
     end
 end
 
---[[ Г“Г±ГІГ Г­Г ГўГ«ГЁГўГ ГҐГІ Г­Г Г§ГўГ Г­ГЁГҐ Г«Г ГўГЄГЁ Г·ГҐГ°ГҐГ§ Г·Г ГІ-ГЄГ®Г¬Г Г­Г¤Гі ]]
+--[[ Устанавливает название лавки через чат-команду ]]
 function changeShopName(arg)
     if arg and #arg >= 3 and #arg <= 20 then
         shopName = arg
@@ -1636,7 +1647,7 @@ function changeShopName(arg)
     end
 end
 
---[[ ГЏГ°Г®ГўГҐГ°ГїГҐГІ, Г­Г ГµГ®Г¤ГЁГІГ±Гї Г«ГЁ ГЁГЈГ°Г®ГЄ Г°ГїГ¤Г®Г¬ Г±Г® Г±ГўГ®ГЎГ®Г¤Г­Г®Г© Г«Г ГўГЄГ®Г© ]]
+--[[ Проверяет, находится ли игрок рядом со свободной лавкой ]]
 function isNearObject(targetId, maxDist)
     maxDist = maxDist or 1.0
     local px, py, pz = getCharCoordinates(PLAYER_PED)
@@ -1655,21 +1666,21 @@ function isNearObject(targetId, maxDist)
     return false
 end
 
---[[ Г”ГЁГ«ГјГІГ°ГіГҐГІ ГЇГ®ГўГІГ®Г°ГїГѕГ№ГҐГҐГ±Гї Г±ГЁГ±ГІГҐГ¬Г­Г®ГҐ Г±Г®Г®ГЎГ№ГҐГ­ГЁГҐ Г® ГЎГ°Г®Г­ГЁ Г«Г ГўГЄГЁ ]]
+--[[ Фильтрует повторяющееся системное сообщение о брони лавки ]]
 function samp.onServerMessage(_, text)
     if type(text) ~= "string" then return end
 
     local cleanText = text:gsub("{......}", "")
 
-    if cleanText:find("Г„Г Г­Г­Г Гї Г«Г ГўГЄГ  ГўГ°ГҐГ¬ГҐГ­Г­Г® Г§Г ГЎГ°Г®Г­ГЁГ°Г®ГўГ Г­Г  Г§Г  ГЁГЈГ°Г®ГЄГ®Г¬", 1, true) then
+    if cleanText:find("Данная лавка временно забронирована за игроком", 1, true) then
         if offFloodChatMessage[0] then
             return false
         end
     end
 
     if isActiveLuxury then
-        if cleanText:find("Г‚Г» ГЄГіГЇГЁГ«ГЁ Г«Г Г°ГҐГ¶ 'Concept Car Luxury'", 1, true) then
-            local amount = cleanText:match("Г‚Г» ГЄГіГЇГЁГ«ГЁ Г«Г Г°ГҐГ¶ 'Concept Car Luxury' %((%d+) ГёГІ%.%)")
+        if cleanText:find("Вы купили ларец 'Concept Car Luxury'", 1, true) then
+            local amount = cleanText:match("Вы купили ларец 'Concept Car Luxury' %((%d+) шт%.%)")
             
             if amount then
                 luxuryCount = luxuryCount + tonumber(amount)
@@ -1680,11 +1691,11 @@ function samp.onServerMessage(_, text)
     end
 end
 
---[[ ГЋГЎГ°Г ГЎГ ГІГ»ГўГ ГҐГІ Г¤ГЁГ Г«Г®ГЈГЁ Г«Г®ГўГ«ГЁ ГЁ Г ГўГІГ®Г¬Г ГІГЁГ·ГҐГ±ГЄГ®Г© ГЇГ°Г®Г¤Г Г¦ГЁ ]]
+--[[ Обрабатывает диалоги ловли и автоматической продажи ]]
 function samp.onShowDialog(id, style, title, button1, button2, text)
     local cleanText = text:gsub("%[.-%]", ""):gsub("{......}", "")
     if isActiveFlood then
-        if id == 3020 or title:find("[ГЌГ­]Г Г§ГўГ Г­ГЁГҐ") or text:find("[ГЌГ­]Г Г§ГўГ Г­ГЁГҐ") then
+        if id == 3020 or title:find("[Нн]азвание") or text:find("[Нн]азвание") then
             isSpammingAlt = false
             lua_thread.create(function()
                 local delaySec = (delay and delay[0]) or (ini and ini.main and ini.main.delay) or 0
@@ -1697,12 +1708,12 @@ function samp.onShowDialog(id, style, title, button1, button2, text)
                 sampSendDialogResponse(id, 1, -1, shopName)
                 
                 if not (silentMode and silentMode[0]) then
-                    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. " Г“Г±ГІГ Г­Г®ГўГ«ГҐГ­Г® Г­Г Г§ГўГ Г­ГЁГҐ Г«Г ГўГЄГЁ: ".. colors.green .. shopName, -1)
+                    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. " Установлено название лавки: ".. colors.green .. shopName, -1)
                 end
             end)
             return false 
 
-        elseif id == 3030 or title:find("[Г–Г¶]ГўГҐГІ") or text:find("[Г–Г¶]ГўГҐГІ") then
+        elseif id == 3030 or title:find("[Цц]вет") or text:find("[Цц]вет") then
             isSpammingAlt = false
             local listIndex = 0
 
@@ -1738,9 +1749,9 @@ function samp.onShowDialog(id, style, title, button1, button2, text)
 
     if autoSellFlow and (
         id == 27360 or 
-        title:find("[Г‚Гў]Г»Г±ГІГ ГўГ«ГҐГ­ГЁГҐ Г«Г ГўГЄГЁ") or 
-        text:find("[ГЉГЄ]Г®Г¬ГЁГ±Г±ГЁГї Г§Г  ГЇГ°Г®Г¤Г Г¦Гі") or
-        text:find("Г±ГІГ®ГЁГ¬Г®Г±ГІГј ГЇГ°Г®Г¤Г Г¦ГЁ Г«Г ГўГЄГЁ")
+        title:find("[Вв]ыставление лавки") or 
+        text:find("[Кк]омиссия за продажу") or
+        text:find("стоимость продажи лавки")
     ) then
 
         autoSellFlow = false
@@ -1757,14 +1768,14 @@ function samp.onShowDialog(id, style, title, button1, button2, text)
 
     if isActiveLuxury then
         local cleanText = text:gsub("{......}", "")
-        if id == 25190 or cleanText:find('ГЌГҐГ«ГјГ§Гї ГЇГ®ГЄГіГЇГ ГІГј ГЎГ®Г«ГҐГҐ 2 Г«Г Г°Г¶Г®Гў Г§Г  10 Г±ГҐГЄГіГ­Г¤.') then
+        if id == 25190 or cleanText:find('Нельзя покупать более 2 ларцов за 10 секунд.') then
             sampSendDialogResponse(id, 1, -1, "")
             return false
         end
     end
 end
 
---[[ ГЋГЎГ­Г®ГўГ«ГїГҐГІ Г±ГІГ ГІГіГ± Г«Г ГўГЄГЁ ГЇГ® ГІГҐГЄГ±ГІГі 3D-Г®ГЎГєГҐГЄГІГ  ]]
+--[[ Обновляет статус лавки по тексту 3D-объекта ]]
 function samp.onSetObjectMaterialText(id, data)
     if not data or type(data.text) ~= "string" then
         return
@@ -1782,9 +1793,9 @@ function samp.onSetObjectMaterialText(id, data)
         end
     end
 
-    local shopNumber = tonumber(data.text:match("ГЌГ®Г¬ГҐГ° (%d+)%. {......}Г‘ГўГ®ГЎГ®Г¤Г­Г Гї!"))
+    local shopNumber = tonumber(data.text:match("Номер (%d+)%. {......}Свободная!"))
     local isFree = shopNumber ~= nil and shopNumber < 39
-    local isForSale = data.text:lower():find("Г‹Г ГўГЄГ  ГЇГ°Г®Г¤Г ГҐГІГ±Гї")
+    local isForSale = data.text:lower():find("Лавка продается")
 
     if isFree then
         local known = false
@@ -1824,7 +1835,7 @@ function samp.onSetObjectMaterialText(id, data)
     end
 end
 
---[[ Г“Г¤Г Г«ГїГҐГІ ГіГ­ГЁГ·ГІГ®Г¦ГҐГ­Г­Г»Г© Г®ГЎГєГҐГЄГІ Г«Г ГўГЄГЁ ГЁГ§ Г±ГЇГЁГ±ГЄГ®Гў Г°ГҐГ­Г¤ГҐГ°Г  ]]
+--[[ Удаляет уничтоженный объект лавки из списков рендера ]]
 function samp.onDestroyObject(id)
     local object = sampGetObjectHandleBySampId(id)
     for index = #renderMassive, 1, -1 do
@@ -1837,15 +1848,15 @@ function samp.onDestroyObject(id)
     clearReserveData(nil, object, true)
 end
 
---[[ Г‘Г®ГµГ°Г Г­ГїГҐГІ Г ГЄГІГіГ Г«ГјГ­Г»Г© ГІГ Г©Г¬ГҐГ° Г®ГЄГ®Г­Г·Г Г­ГЁГї ГЎГ°Г®Г­ГЁ ГЁГ§ 3D-ГІГҐГЄГ±ГІГ  ]]
+--[[ Сохраняет актуальный таймер окончания брони из 3D-текста ]]
 local function updateReserveLabel(id, position, text)
     clearReserveData(id)
 
-    if type(text) ~= "string" or not text:find("Г‡Г ГўГҐГ°ГёГҐГ­ГЁГҐ ГЎГ°Г®Г­ГЁ") then
+    if type(text) ~= "string" or not text:find("Завершение брони") then
         return
     end
 
-    local minutesText = text:match("Г·ГҐГ°ГҐГ§%s*([%d%.,]+)")
+    local minutesText = text:match("через%s*([%d%.,]+)")
     local minutes = minutesText and tonumber((minutesText:gsub(",", ".")))
     if not minutes then
         return
@@ -1862,22 +1873,22 @@ local function updateReserveLabel(id, position, text)
     end
 end
 
---[[ ГЋГЎГ°Г ГЎГ ГІГ»ГўГ ГҐГІ Г±Г®Г§Г¤Г Г­ГЁГҐ 3D-ГІГҐГЄГ±ГІГ  Г± ГІГ Г©Г¬ГҐГ°Г®Г¬ ГЎГ°Г®Г­ГЁ ]]
+--[[ Обрабатывает создание 3D-текста с таймером брони ]]
 function samp.onCreate3DText(id, _, position, _, _, _, _, text)
     updateReserveLabel(id, position, text)
 end
 
---[[ ГЋГЎГ°Г ГЎГ ГІГ»ГўГ ГҐГІ Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ 3D-ГІГҐГЄГ±ГІГ  Г± ГІГ Г©Г¬ГҐГ°Г®Г¬ ГЎГ°Г®Г­ГЁ ]]
+--[[ Обрабатывает обновление 3D-текста с таймером брони ]]
 function samp.onUpdate3DText(id, _, position, _, _, _, _, text)
     updateReserveLabel(id, position, text)
 end
 
---[[ Г“Г¤Г Г«ГїГҐГІ ГІГ Г©Г¬ГҐГ° ГЁ Г®ГІГ«Г®Г¦ГҐГ­Г­ГіГѕ Г§Г ГЇГЁГ±Гј ГіГ­ГЁГ·ГІГ®Г¦ГҐГ­Г­Г®ГЈГ® 3D-ГІГҐГЄГ±ГІГ  ]]
+--[[ Удаляет таймер и отложенную запись уничтоженного 3D-текста ]]
 function samp.onDestroy3DText(id)
     clearReserveData(id)
 end
 
---[[ Г‡Г ГЇГіГ±ГЄГ ГҐГІ ГЇГ®Г±ГІГ®ГїГ­Г­Г»Г© Г¶ГЁГЄГ« Г®ГІГ°ГЁГ±Г®ГўГЄГЁ Г«Г ГўГ®ГЄ ]]
+--[[ Запускает постоянный цикл отрисовки лавок ]]
 lua_thread.create(function()
     while true do
         wait(0)
@@ -1885,7 +1896,7 @@ lua_thread.create(function()
     end
 end)
 
---[[ Г‚ГЄГ«ГѕГ·Г ГҐГІ ГЁГ«ГЁ ГўГ»ГЄГ«ГѕГ·Г ГҐГІ Г®Г·ГЁГ±ГІГЁГІГҐГ«Гј ГЁГЈГ°Г®ГЄГ®Гў ГЁ ГІГ°Г Г­Г±ГЇГ®Г°ГІГ  ]]
+--[[ Включает или выключает очиститель игроков и транспорта ]]
 function cleaner()
     isActiveCleaner = not isActiveCleaner
 
@@ -1900,11 +1911,11 @@ function cleaner()
             end
         end
 
-        sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "ГЋГ·ГЁГ±ГІГЁГІГҐГ«Гј" .. colors.green .. " Г‚Г›ГЉГ‹ГћГ—Г…ГЌ!", -1)
+        sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "Очиститель" .. colors.green .. " ВЫКЛЮЧЕН!", -1)
         return
     end
 
-    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "ГЋГ·ГЁГ±ГІГЁГІГҐГ«Гј" .. colors.red .. " Г‚ГЉГ‹ГћГ—Г…ГЌ!", -1)
+    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "Очиститель" .. colors.red .. " ВКЛЮЧЕН!", -1)
 
     lua_thread.create(function()
         local _, myPlayerId = sampGetPlayerIdByCharHandle(PLAYER_PED)
@@ -1981,7 +1992,7 @@ function cleaner()
 
                 renderFontDrawText(
                     renderFontSmall,
-                    "ГЋГ—Г€Г‘Г’Г€Г’Г…Г‹Гњ Г‚ГЉГ‹ГћГ—Г…ГЌ! ГЃГ“Г„ГњГ’Г… ГЋГ‘Г’ГЋГђГЋГ†ГЌГ›",
+                    "ОЧИСТИТЕЛЬ ВКЛЮЧЕН! БУДЬТЕ ОСТОРОЖНЫ",
                     sw / 2 - 210,
                     sh - 55,
                     0xFFFF0000
@@ -1991,7 +2002,7 @@ function cleaner()
     end)
 end
 
---[[ Г‚Г®Г§ГўГ°Г Г№Г ГҐГІ Г¶ГўГҐГІ Гў ГґГ®Г°Г¬Г ГІГҐ HEX Г­Г  Г®Г±Г­Г®ГўГҐ CPS ]]
+--[[ Возвращает цвет в формате HEX на основе CPS ]]
 function getCpsColorHex(cps, maxCps)
     maxCps = maxCps or 120
     local t = math.min(1.0, math.max(0.0, cps / maxCps))
@@ -2008,7 +2019,7 @@ function getCpsColorHex(cps, maxCps)
     return string.format("{%02X%02X%02X}", r, g, b)
 end
 
---[[ ГЏГ®ГЄГ Г§Г»ГўГ ГҐГІ ГўГ°ГҐГ¬Гї Г«Г®ГўГ«ГЁ ГЁ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г­Г Г¦Г ГІГЁГ© Г­ГҐГ§Г ГўГЁГ±ГЁГ¬Г® Г®ГІ Г®Г·ГЁГ±ГІГЁГІГҐГ«Гї ]]
+--[[ Показывает время ловли и количество нажатий независимо от очистителя ]]
 lua_thread.create(function()
     while true do
         wait(0)
@@ -2031,10 +2042,10 @@ lua_thread.create(function()
             local cpsColor = getCpsColorHex(floodCps, 120)
 
             if isActiveLuxury then
-                local cpsDisplay = isSpammingAlt and string.format("%s%d", cpsColor, floodCps) or "{FF0000}ГЏГ ГіГ§Г "
+                local cpsDisplay = isSpammingAlt and string.format("%s%d", cpsColor, floodCps) or "{FF0000}Пауза"
                 renderFontDrawText(
                     renderFontSmall,
-                    string.format("{00FFFF}ГЌГ Г¦Г ГІГЁГ© {FFD700}ALT {00FFFF}Гў Г±ГҐГЄГіГ­Г¤Гі: %s {FFFF00}/ {00FFFF}Г‹Г Г°Г¶Г®Гў: {ff0000}%d", cpsDisplay, luxuryCount),
+                    string.format("{00FFFF}Нажатий {FFD700}ALT {00FFFF}в секунду: %s {FFFF00}/ {00FFFF}Ларцов: {ff0000}%d", cpsDisplay, luxuryCount),
                     sw / 2 - 100,
                     sh - 75,
                     0xFFFFFFFF
@@ -2042,7 +2053,7 @@ lua_thread.create(function()
             elseif showFloodStats[0] then
                 renderFontDrawText(
                     renderFontSmall,
-                    string.format("{A7F3D0}Г‚Г°ГҐГ¬Гї Г«Г®ГўГ«ГЁ: {FFFF00}%02d:%02d.%d", math.floor(elapsedMs / 60000), math.floor(elapsedMs / 1000) % 60, math.floor(elapsedMs / 100) % 10),
+                    string.format("{A7F3D0}Время ловли: {FFFF00}%02d:%02d.%d", math.floor(elapsedMs / 60000), math.floor(elapsedMs / 1000) % 60, math.floor(elapsedMs / 100) % 10),
                     sw / 2 - 100,
                     sh - 75,
                     0xFFFFFFFF
@@ -2050,7 +2061,7 @@ lua_thread.create(function()
 
                 renderFontDrawText(
                     renderFontSmall,
-                    string.format("{A7F3D0}ГЌГ Г¦Г ГІГЁГ© Гў Г±ГҐГЄГіГ­Г¤Гі: %s%d", cpsColor, floodCps),
+                    string.format("{A7F3D0}Нажатий в секунду: %s%d", cpsColor, floodCps),
                     sw / 2 - 100,
                     sh - 95,
                     0xFFFFFFFF
@@ -2060,7 +2071,7 @@ lua_thread.create(function()
     end
 end)
 
---[[ ГЋГІГЄГ«ГѕГ·Г ГҐГІ Г±Г®Г®ГЎГ№ГҐГ­ГЁГї Г±ГЄГ°ГЁГЇГІГ  Гў Г·Г ГІГҐ ]]
+--[[ Отключает сообщения скрипта в чате ]]
 local orig_sampAddChatMessage = sampAddChatMessage
 function sampAddChatMessage(text, color)
     if silentMode and silentMode[0] then
@@ -2071,12 +2082,12 @@ function sampAddChatMessage(text, color)
     end
 end
 
---[[ Г‹Г®ГЈГЁГЄГ  Concept Car Luxury ]]
+--[[ Логика Concept Car Luxury ]]
 function toggleLuxury(state)
     local shouldEnable = (state ~= nil) and state or (not isActiveLuxury)
 
     if not isNearObject(19300, 1.1) then
-        sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. "Г‚Г» Г¤Г Г«ГҐГЄГ® Г®ГІ Г¬ГҐГ±ГІГ  Г«Г®ГўГ«ГЁ!", -1)
+        sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. "Вы далеко от места ловли!", -1)
         return
     end
 
@@ -2097,12 +2108,12 @@ function toggleLuxury(state)
         luxuryCount = 0
     end
 
-    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. " Г‹Г®ГўГ«Гї Г«Г Г°Г¶Г®Гў: " .. (isActiveLuxury and colors.greenBright .. "Г‚ГЉГ‹" or colors.redLower .. "Г‚Г›ГЉГ‹"))
+    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. " Ловля ларцов: " .. (isActiveLuxury and colors.greenBright .. "ВКЛ" or colors.redLower .. "ВЫКЛ"))
 
     lua_thread.create(function()
         while isActiveLuxury do
             if not isNearObject(19300, 1.1) then
-                sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. "Г‚Г» Г®ГІГ®ГёГ«ГЁ Г®ГІ Г¬ГҐГ±ГІГ  Г«Г®ГўГ«ГЁ. Г”Г«ГіГ¤ ГўГ»ГЄГ«ГѕГ·ГҐГ­.", -1)
+                sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. "Вы отошли от места ловли. Флуд выключен.", -1)
                 isActiveLuxury = false
                 isSpammingAlt = false
                 break
@@ -2118,7 +2129,7 @@ function toggleLuxury(state)
     end)
 end
 
---[[ГЏГ®ГІГ®ГЄ Г¤Г«Гї Г ГўГІГ®Г¬Г ГІГЁГ·ГҐГ±ГЄГ®ГЈГ® ГўГЄГ«ГѕГ·ГҐГ­ГЁГї ГґГ«ГіГ¤ГҐГ°Г  Г«Г Г°Г¶Г®Гў Concept Car Luxury]]
+--[[Поток для автоматического включения флудера ларцов Concept Car Luxury]]
 lua_thread.create(function()
     while true do
         wait(500)
