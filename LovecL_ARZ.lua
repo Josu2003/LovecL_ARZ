@@ -540,7 +540,7 @@ function main()
     checkUpdate()
     wait(1000)
 
-    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "Скрипт загружен! Версия: 2.1 | Автор:" .. colors.turquoise .. " Koora")
+    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "Скрипт загружен! Версия: 2.2 | Автор:" .. colors.turquoise .. " Koora")
     sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "Используйте /lmenu или Alt + 1 чтобы открыть меню.")
     if shopName == "" then
         sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. "Текущее название лавки: не установлено.")
@@ -557,7 +557,7 @@ function main()
     sampRegisterChatCommand("render", toggleRender)
     sampRegisterChatCommand("resrender", resetRender)
     sampRegisterChatCommand("luxury", toggleLuxury)
-    sampRegisterChatCommand('updatelovacl', function()
+    sampRegisterChatCommand('updatelovecl', function()
     if updateVersion ~= "" then
         windowUpdate[0] = not windowUpdate[0]
     else
@@ -878,7 +878,7 @@ imgui.OnFrame(
             applyStyleMintGarden()
         end
 
-            imgui.Begin("LovecL ARZ v2.1 by Koora", WinState, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize)
+            imgui.Begin("LovecL ARZ v2.2 by Koora", WinState, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize)
             local pos = imgui.GetWindowPos()
             mainWindowPos = {
                 x = pos.x,
@@ -1048,10 +1048,17 @@ imgui.OnFrame(function()
         return windowUpdate[0]
         end, function()
 
+        imgui.SetNextWindowSize(imgui.ImVec2(400, 200), imgui.Cond.FirstUseEver)    
         imgui.PushStyleVarVec2(imgui.StyleVar.WindowTitleAlign, imgui.ImVec2(0.5, 0.5))
-        if mainWindowPos then
-            imgui.SetNextWindowPos(imgui.ImVec2(mainWindowPos.x + 0, mainWindowPos.y - 271), imgui.Cond.Always)
+        
+        local resX, resY = getScreenResolution()
+
+        if mainWindowPos and mainWindowPos.x > 0 then
+            imgui.SetNextWindowPos(imgui.ImVec2(mainWindowPos.x - 339, mainWindowPos.y), imgui.Cond.FirstUseEver)
+        else
+            imgui.SetNextWindowPos(imgui.ImVec2(resX / 2, resY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
         end
+
         local activeTheme = currentTheme[0]
         if activeTheme == 0 then
             applyStyleTurquoise()
@@ -1432,7 +1439,7 @@ end, function()
     imgui.Begin(u8 "Информация", InfoWindow, imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoCollapse)
 
     imgui.PushTextWrapPos(0)
-    imgui.Text(u8 "Скрипт: LovecL ARZ v2.1")
+    imgui.Text(u8 "Скрипт: LovecL ARZ v2.2")
     imgui.Text(u8 "Автор: Koora")
     imgui.Text(u8 " ")
     imgui.Text(u8 "ОПИСАНИЕ:")
@@ -1505,7 +1512,7 @@ end, function()
     imgui.SameLine()
     imgui.Text(u8 "— Включить/выключить ловлю ларцов Concept Car Luxury.")
 
-    imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), '/updatelovacl')
+    imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), '/updatelovecl')
     imgui.SameLine()
     imgui.Text(u8 "— Проверить обновление скрипта.")
 
@@ -1519,7 +1526,7 @@ end, function()
 
     imgui.Text(u8 " ")
     imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8 "ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ:")
-    imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(1, 0, 0, 1)) -- красный текст
+    imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(1, 0, 0, 1))
     imgui.BulletText(
         u8 "В данном скрипте присутствует авто-обновление после подтверждения.")
     imgui.BulletText(
