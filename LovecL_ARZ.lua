@@ -267,7 +267,7 @@ function checkUpdate()
                             updateUrl = data.url
                             
                             -- Уведомление в чат с правильным именем команды
-                            sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. " Доступно новое обновление" .. colors.green .. " v" .. updateVersion .. colors.white .. "! Введите" .. colors.red .. "/updatelovecl," .. colors.white .. " чтобы обновиться.", -1)
+                            sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. " Доступно новое обновление" .. colors.green .. " v" .. updateVersion .. colors.white .. "! Введите" .. colors.red .. " /updatelovecl" .. colors.white .. ", чтобы обновиться.", -1)
                         end
                     end
                 end
