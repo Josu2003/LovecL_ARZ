@@ -631,8 +631,6 @@ imgui.OnInitialize(function()
     end
 end)
 
-
-
 --[[ Тема 1: бирюзовая ]]
 function applyStyleTurquoise()
     local rgba = imgui.ImVec4
@@ -903,9 +901,16 @@ imgui.OnFrame(
             end
             imgui.PopStyleVar()
             
-            
-            if imgui.Button(u8'Update', imgui.ImVec2(90, 33)) then
-                windowUpdate[0] = not windowUpdate[0]
+            if updateVersion ~= "" then
+                imgui.PushStyleColor(imgui.Col.Button,        imgui.ImVec4(0.16, 0.65, 0.27, 1.00)) 
+                imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImVec4(0.20, 0.75, 0.32, 1.00)) 
+                imgui.PushStyleColor(imgui.Col.ButtonActive,  imgui.ImVec4(0.12, 0.52, 0.21, 1.00)) 
+
+                if imgui.Button(ti.ICON_BOOK_DOWNLOAD .. u8' Update', imgui.ImVec2(90, 33)) then
+                    windowUpdate[0] = not windowUpdate[0]
+                end
+
+                imgui.PopStyleColor(3) 
             end
 
             imgui.SetCursorPos(imgui.ImVec2(6, 262))
