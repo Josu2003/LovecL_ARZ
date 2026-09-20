@@ -3,7 +3,7 @@ script_name = "LovecL ARZ v2.2"
 script_author = "Koora"
 script_version = "2.2"
 
-local update_json_url = "https://raw.githubusercontent.com/Josu2003/LovecL_ARZ/refs/heads/main/version.json?token=GHSAT0AAAAAAEJTGSXXA4DCDYLBFNPEB5242VPTCZA"
+local update_json_url = "https://raw.githubusercontent.com/Josu2003/LovecL_ARZ/refs/heads/main/update.json?token=GHSAT0AAAAAAEJTGSXWF3VGIYRETP7HBFBE2VPTLXQ"
 local updateVersion = ""
 local updateChangelog = ""
 local updateUrl = ""
