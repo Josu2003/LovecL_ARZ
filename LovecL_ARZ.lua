@@ -1432,7 +1432,7 @@ end, function()
     imgui.Begin(u8 "Информация", InfoWindow, imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoCollapse)
 
     imgui.PushTextWrapPos(0)
-    imgui.Text(u8 "Скрипт:" .. nameScript .. " v2.1")
+    imgui.Text(u8 "Скрипт: LovecL ARZ v2.1")
     imgui.Text(u8 "Автор: Koora")
     imgui.Text(u8 " ")
     imgui.Text(u8 "ОПИСАНИЕ:")
