@@ -1,7 +1,7 @@
 --[[ Информация о скрипте ]]
 script_name("LovecL ARZ")
 script_author("Koora")
-script_version("2.1")
+script_version("2.2")
 
 local update_json_url = "https://raw.githubusercontent.com/Josu2003/LovecL_ARZ/refs/heads/main/update.json"
 local updateVersion = ""
@@ -1521,9 +1521,11 @@ end, function()
     imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8 "ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ:")
     imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(1, 0, 0, 1)) -- красный текст
     imgui.BulletText(
+        u8 "В данном скрипте присутствует авто-обновление после подтверждения.")
+    imgui.BulletText(
         u8 "Автор не несёт ответственности за возможные последствия использования скрипта.")
     imgui.BulletText(u8 "Используйте на свой страх и риск.")
-    imgui.PopStyleColor()
+    imgui.PopStyleColor(1)
 
     imgui.Text(u8 " ")
     imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8 "Если проебал что то дайте знать.")
