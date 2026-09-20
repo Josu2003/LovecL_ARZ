@@ -540,7 +540,7 @@ function main()
     checkUpdate()
     wait(1000)
 
-    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "Скрипт загружен! Версия: 2.1 | Автор:" .. colors.turquoise .. " Koora")
+    sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "Скрипт загружен! Версия: 2.2 | Автор:" .. colors.turquoise .. " Koora")
     sampAddChatMessage(colors.turquoise .. nameScript .. colors.white .. "Используйте /lmenu или Alt + 1 чтобы открыть меню.")
     if shopName == "" then
         sampAddChatMessage(colors.turquoise .. nameScript .. colors.red .. "Текущее название лавки: не установлено.")
@@ -878,7 +878,7 @@ imgui.OnFrame(
             applyStyleMintGarden()
         end
 
-            imgui.Begin("LovecL ARZ v2.1 by Koora", WinState, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize)
+            imgui.Begin("LovecL ARZ v2.2 by Koora", WinState, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize)
             local pos = imgui.GetWindowPos()
             mainWindowPos = {
                 x = pos.x,
@@ -1432,7 +1432,7 @@ end, function()
     imgui.Begin(u8 "Информация", InfoWindow, imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoCollapse)
 
     imgui.PushTextWrapPos(0)
-    imgui.Text(u8 "Скрипт: LovecL ARZ v2.1")
+    imgui.Text(u8 "Скрипт: LovecL ARZ v2.2")
     imgui.Text(u8 "Автор: Koora")
     imgui.Text(u8 " ")
     imgui.Text(u8 "ОПИСАНИЕ:")
